@@ -1,5 +1,4 @@
 import java.awt.*;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -12,12 +11,13 @@ public class GameBoard extends JFrame {
     private JPanel gameBoard;
     private GameSpace [][] gameSpaces;
     private int numPlayers, rows, columns;
+    private Color setupColor; //used to set the color of the piece that starts in each space at the beginning of the game
     
     
     public GameBoard(){
     	
-    	rows = 5;
-    	columns = 5;
+    	rows = 8;
+    	columns = 8;
     	
     	topPanel = new JPanel();
     	//bottomPanel = new JPanel();
@@ -31,17 +31,18 @@ public class GameBoard extends JFrame {
     	topPanel.setSize(200,200);
     	//bottomPanel.setLayout(new FlowLayout());
     	
-    	gameBoard.setLayout(new GridLayout());
+    	gameBoard.setLayout(new GridLayout(rows, columns));
     	gameBoard.setSize(500,500);
     	
     	gameSpaces = new GameSpace[rows][columns];
     	for (int x = 0 ; x < columns; x++) {
-    		for ( int y = 0; y < rows; y++) {
-    			Border raisedBevel = BorderFactory.createRaisedBevelBorder();
+    		for (int y = 0; y < rows; y++) {
     			gameSpaces[x][y] = new GameSpace(x, y);
     			gameSpaces[x][y].setSize(20,20);
     			gameSpaces[x][y].setOpaque(true);
-    			gameSpaces[x][y].setBorder(raisedBevel);
+    			gameSpaces[x][y].setBorderPainted(true);
+    			setupColor = gameSpaces[x][y].initialColor();
+    			gameSpaces[x][y].addPiece(new GamePiece(setupColor));
     			gameBoard.add(gameSpaces[x][y]);
     		}
     	}
@@ -53,7 +54,7 @@ public class GameBoard extends JFrame {
 		getContentPane().add(gameBoard, BorderLayout.CENTER);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setResizable(false);
+		setResizable(true);
 		setVisible(true);
     }
 

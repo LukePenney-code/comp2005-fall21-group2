@@ -1,7 +1,6 @@
 import java.awt.*;
-
 import javax.swing.*;
-public class GamePiece extends JButton{
+public class GamePiece{
 	
 	private Color color;
 	private int playerNum;
@@ -16,7 +15,6 @@ public class GamePiece extends JButton{
 		
 		this.color = color;
 		playerNum = 0;
-		this.setSize(20,20);
 	}
 	
 	public int getPlayerNum() {
