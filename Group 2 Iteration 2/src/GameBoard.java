@@ -15,7 +15,7 @@ public class GameBoard extends JFrame implements ActionListener {
     private GameSpace [][] gameSpaces;
     private int numPlayers, rows, columns;
     private Color setupColor; //used to set the color of the piece that starts in each space at the beginning of the game
-    private JButton quit;
+    private JButton quit, colorBlindButton;
     
     public GameBoard(){
     	
@@ -25,12 +25,14 @@ public class GameBoard extends JFrame implements ActionListener {
     	topPanel = new JPanel();
     	//bottomPanel = new JPanel();
     	//rightPanel = new JPanel();
-    	//leftPanel = new JPanel();
+    	leftPanel = new JPanel();
     	gameBoard = new JPanel();
     	quit = new JButton("Quit");
-    	
+    	colorBlindButton = new JButton("Toggle Color Defiency Settings");
+    	colorBlindButton.addActionListener(this);
     	quit.addActionListener(this);
     	topPanel.add(quit);
+    	topPanel.add(colorBlindButton);
     	
     	
     	this.setSize(500,500);
@@ -60,7 +62,7 @@ public class GameBoard extends JFrame implements ActionListener {
 		getContentPane().add(topPanel, BorderLayout.NORTH);
 		//getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 		//getContentPane().add(rightPanel, BorderLayout.EAST);
-		//getContentPane().add(leftPanel, BorderLayout.WEST);
+		getContentPane().add(leftPanel, BorderLayout.WEST);
 		getContentPane().add(gameBoard, BorderLayout.CENTER);
 		
 		
@@ -75,8 +77,14 @@ public class GameBoard extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 		Object selected = e.getSource();
 		if(selected.equals(quit)) {
-			JOptionPane.showConfirmDialog(gameBoard, "Would You Like To Save?");
+			String response = JOptionPane.showInputDialog(gameBoard, "Would You Like To Save? \n Type 'yes' or 'no'");
+			response.toLowerCase();
+			if(response.equals(response)) {
+				System.exit(0);
+			}
+		if(selected.equals(colorBlindButton)) {
 			
+		}
 		}
 	}
     
