@@ -1,8 +1,11 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 
-public class GameBoard extends JFrame {
+public class GameBoard extends JFrame implements ActionListener {
 	
     private JPanel topPanel;
     private JPanel leftPanel;
@@ -12,7 +15,7 @@ public class GameBoard extends JFrame {
     private GameSpace [][] gameSpaces;
     private int numPlayers, rows, columns;
     private Color setupColor; //used to set the color of the piece that starts in each space at the beginning of the game
-    
+    private JButton quit;
     
     public GameBoard(){
     	
@@ -24,6 +27,11 @@ public class GameBoard extends JFrame {
     	//rightPanel = new JPanel();
     	//leftPanel = new JPanel();
     	gameBoard = new JPanel();
+    	quit = new JButton("Quit");
+    	
+    	quit.addActionListener(this);
+    	topPanel.add(quit);
+    	
     	
     	this.setSize(500,500);
     	
@@ -55,11 +63,29 @@ public class GameBoard extends JFrame {
 		//getContentPane().add(leftPanel, BorderLayout.WEST);
 		getContentPane().add(gameBoard, BorderLayout.CENTER);
 		
+		
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true);
 		setVisible(true);
     }
 
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		Object selected = e.getSource();
+		if(selected.equals(quit)) {
+			JOptionPane.showConfirmDialog(gameBoard, "Would You Like To Save?");
+			
+		}
+	}
+    
+    
+   
 
+	
+
+
+	
 	
 }
