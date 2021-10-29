@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 public class GameSpace extends JButton{
 	private ArrayList<GamePiece> stack;
-	private int xcoord, ycoord;
+	private int xcoord, ycoord, i;
+	private JPanel[] panels;
 	
 	/**
 	 * @param stack
@@ -21,6 +22,19 @@ public class GameSpace extends JButton{
 			this.setBackground(Color.black);
 		} else {
 			this.setBackground(Color.white);
+		}
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		//add panels to all white spaces to use for visual representation of pieces
+		panels = new JPanel[5];
+		i = 0;
+		if (this.getBackground() == Color.white) {
+			while (i < 5) {
+				panels[i] = new JPanel();
+				panels[i].setSize(4, 4);
+				panels[i].setBackground(Color.white);
+				this.add(panels[i]);
+				i++;
+			}
 		}
 	}
 
@@ -41,6 +55,7 @@ public class GameSpace extends JButton{
 	
 	public void addPiece(GamePiece newPiece) {
 		stack.add(newPiece);
+		panels[getStackSize() - 1].setBackground(newPiece.getColor());
 	}
 
 
@@ -63,26 +78,26 @@ public class GameSpace extends JButton{
 		this.ycoord = ycoord;
 	}
 	
+	public Color getColor() {
+		return this.getBackground();
+	}
+	
 	public Color initialColor() {
 		// returns the color that the piece that starts on this space at the beginning of the game should be set to
-		if ((xcoord < 4) && ((ycoord == 5) || (ycoord == 7))) {
+		if ((xcoord < 4) && ((ycoord == 2) || (ycoord == 0))) {
 			return Color.blue;
-		}
-		if (((xcoord == 1) || (xcoord == 3)) && (ycoord < 4)) {
+		}else if (((xcoord == 1) || (xcoord == 3)) && (ycoord > 3)) {
 			return Color.blue;
-		}
-		if ((xcoord > 3) && ((ycoord == 0) || (ycoord == 2))) {
+		}else if ((xcoord > 3) && ((ycoord == 7) || (ycoord == 5))) {
 			return Color.red;
-		}
-		if (((xcoord == 4) || (xcoord == 6)) && (ycoord > 3)) {
+		}else if (((xcoord == 4) || (xcoord == 6)) && (ycoord < 4)) {
 			return Color.red;
-		}
-		if ((xcoord > 3) && ((ycoord == 4) || (ycoord == 6))) {
+		}else if ((xcoord < 4) && ((ycoord == 3) || (ycoord == 1))) {
 			return Color.yellow;
-		}
-		if (((xcoord == 5) || (xcoord == 7)) && (ycoord > 3)) {
+		}else if (((xcoord == 5) || (xcoord == 7)) && (ycoord < 4)) {
 			return Color.yellow;
+		}else {
+			return Color.green;
 		}
-		return Color.green;
 	}
 }

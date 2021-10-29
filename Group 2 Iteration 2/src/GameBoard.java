@@ -35,14 +35,16 @@ public class GameBoard extends JFrame {
     	gameBoard.setSize(500,500);
     	
     	gameSpaces = new GameSpace[rows][columns];
-    	for (int x = 0 ; x < columns; x++) {
-    		for (int y = 0; y < rows; y++) {
+    	for (int y = 0; y < rows; y++) {
+    		for (int x = 0 ; x < columns; x++) {
     			gameSpaces[x][y] = new GameSpace(x, y);
     			gameSpaces[x][y].setSize(20,20);
     			gameSpaces[x][y].setOpaque(true);
     			gameSpaces[x][y].setBorderPainted(true);
-    			setupColor = gameSpaces[x][y].initialColor();
-    			gameSpaces[x][y].addPiece(new GamePiece(setupColor));
+    			if (gameSpaces[x][y].getColor() != Color.black) {
+    				setupColor = gameSpaces[x][y].initialColor();
+    				gameSpaces[x][y].addPiece(new GamePiece(setupColor));
+    			}
     			gameBoard.add(gameSpaces[x][y]);
     		}
     	}
