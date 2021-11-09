@@ -16,6 +16,7 @@ public class GameBoard extends JFrame implements ActionListener {
     private int numPlayers, rows, columns;
     private Color setupColor; //used to set the color of the piece that starts in each space at the beginning of the game
     private JButton quit, colorBlindButton;
+    private JLabel info;
     
     public GameBoard(){
     	
@@ -33,6 +34,8 @@ public class GameBoard extends JFrame implements ActionListener {
     	quit.addActionListener(this);
     	topPanel.add(quit);
     	topPanel.add(colorBlindButton);
+    	
+    	
     	
     	
     	this.setSize(500,500);
@@ -83,11 +86,13 @@ public class GameBoard extends JFrame implements ActionListener {
 				System.exit(0);
 			}
 		if(selected.equals(colorBlindButton)) {
-			
+			info = new JLabel("Color Blind Mode is Active");
+			topPanel.add(info);
+			info.setVisible(true);
 		}
 		}
 	}
-    
+}
     
    
 
@@ -96,4 +101,3 @@ public class GameBoard extends JFrame implements ActionListener {
 
 	
 	
-}
