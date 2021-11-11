@@ -1,0 +1,33 @@
+Save Game
+
+Primary Actor: Player
+
+Stakeholders and interest:
+Player - Wants to save the current state of the game to be returned to in the future
+
+Pre Conditions - The game must be ongoing , and not yet finished
+Post Conditions - The game has been saved and system has stored the given state
+
+Main Success Scenario:
+
+1. The user requests to save the current game
+2. The system provides the user with option to save the current game [Alt 1: User decides to not save the game
+3. The user elects to save the game 
+4. The system prompts the user to continue or quit the current game
+5. The user elects to quit the game [Alt 2: User decides to continue the current game]
+6. The system closes the game [Use case ends]
+
+Alternative Flows:
+
+Alt 1 - User decides not to save the game
+	1. The system returns to the game board
+
+Alt 2 - User decides to continue the current game
+	1. The system asks the user if theyre sure they want to continue
+	2. The system returns to the game board
+
+Exceptions: None
+
+Special Requirements: The game must accomadate for color vision defiency
+
+Open issues: None
