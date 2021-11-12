@@ -86,6 +86,8 @@ public class GameSpace extends JButton{
 		return this.getBackground();
 	}
 	
+	
+	
 	public void update() {
 		//deal with oversized stack
 		while (this.getStackSize() > 5) {
