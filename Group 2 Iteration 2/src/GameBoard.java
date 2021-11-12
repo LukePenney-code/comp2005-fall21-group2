@@ -56,6 +56,7 @@ public class GameBoard extends JFrame implements ActionListener, MouseListener {
     	topPanel.add(currentTurn);
     	
     	
+    	
     	this.setSize(500,500);
     	
     	topPanel.setLayout(new FlowLayout());
@@ -150,18 +151,17 @@ public class GameBoard extends JFrame implements ActionListener, MouseListener {
 			if(response.equals(response)) {
 				System.exit(0);
 			}
+		
 		}
-		if(selected.equals(colorBlindButton)) {
-			info = new JLabel("Color Blind Mode is Active");
-			topPanel.add(info);
-			info.setVisible(true);
-		}
+		
+	
 		
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
+		
 		Object selected = e.getSource();
 		if (selected instanceof GameSpace) {
 			if (moveFromSelected) {
@@ -217,17 +217,23 @@ public class GameBoard extends JFrame implements ActionListener, MouseListener {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
+   @Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
+	   
+   }
+	
 		
-	}
+		
+		
+	
+
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+		Object selected = e.getSource();
+		GameSpace space = (GameSpace) selected;
+		space.remove(space);
 	}
 }
     
