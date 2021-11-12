@@ -27,7 +27,7 @@ public class GameSpace extends JButton{
 		//add panels to all white spaces to use for visual representation of pieces
 		panels = new JPanel[5];
 		i = 0;
-		if (this.getBackground() == Color.white) {
+		if (this.getBackground().equals(Color.white)) {
 			while (i < 5) {
 				panels[i] = new JPanel();
 				panels[i].setSize(4, 4);
@@ -48,16 +48,19 @@ public class GameSpace extends JButton{
 		
 	}
 	
-	public void removePiece() {
+	public void removeBot() {
 		// removes the bottom piece
 		stack.remove(0);
 	}
 	
+	public void removeTop() {
+		// removes the top piece
+		stack.remove(stack.size() - 1);
+	}
+	
 	public void addPiece(GamePiece newPiece) {
 		stack.add(newPiece);
-		panels[getStackSize() - 1].setBackground(newPiece.getColor());
 	}
-
 
 	public int getXcoord() {
 		return xcoord;
@@ -82,12 +85,33 @@ public class GameSpace extends JButton{
 		return this.getBackground();
 	}
 	
+	public void update() {
+		//deal with oversized stack
+		while (this.getStackSize() > 5) {
+			this.removeBot();
+		}
+		//update panel colors
+		int i = this.getStackSize() - 1;
+		int j = 0;
+		while (i >= 0) {
+			panels[j].setBackground(stack.get(i).getColor());
+			i--;
+			j++;
+		}
+		i = this.getStackSize();
+		while (i < 5) {
+			panels[j].setBackground(Color.white);
+			i++;
+			j++;
+		}
+	}
+	
 	public Color initialColor() {
 		// returns the color that the piece that starts on this space at the beginning of the game should be set to
 		if ((xcoord < 4) && ((ycoord == 2) || (ycoord == 0))) {
-			return Color.blue;
+			return Color.cyan;
 		}else if (((xcoord == 1) || (xcoord == 3)) && (ycoord > 3)) {
-			return Color.blue;
+			return Color.cyan;
 		}else if ((xcoord > 3) && ((ycoord == 7) || (ycoord == 5))) {
 			return Color.red;
 		}else if (((xcoord == 4) || (xcoord == 6)) && (ycoord < 4)) {
