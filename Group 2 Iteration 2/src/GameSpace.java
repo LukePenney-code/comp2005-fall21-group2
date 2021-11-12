@@ -6,6 +6,7 @@ public class GameSpace extends JButton{
 	private ArrayList<GamePiece> stack;
 	private int xcoord, ycoord, i;
 	private JPanel[] panels;
+	private JLabel[] labels;
 	
 	/**
 	 * @param stack
@@ -26,12 +27,16 @@ public class GameSpace extends JButton{
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		//add panels to all white spaces to use for visual representation of pieces
 		panels = new JPanel[5];
+		labels = new JLabel[5];
 		i = 0;
 		if (this.getBackground().equals(Color.white)) {
 			while (i < 5) {
 				panels[i] = new JPanel();
+				labels[i] = new JLabel(" ");
+				labels[i].setFont(new Font("Serif", Font.PLAIN, 7));
 				panels[i].setSize(4, 4);
 				panels[i].setBackground(Color.white);
+				panels[i].add(labels[i]);
 				this.add(panels[i]);
 				i++;
 			}
@@ -45,7 +50,6 @@ public class GameSpace extends JButton{
 	
 	public GamePiece topPiece() {
 		return stack.get(stack.size() - 1);
-		
 	}
 	
 	public void removeBot() {
@@ -66,16 +70,13 @@ public class GameSpace extends JButton{
 		return xcoord;
 	}
 
-
 	public void setXcoord(int xcoord) {
 		this.xcoord = xcoord;
 	}
 
-
 	public int getYcoord() {
 		return ycoord;
 	}
-
 
 	public void setYcoord(int ycoord) {
 		this.ycoord = ycoord;
@@ -103,6 +104,18 @@ public class GameSpace extends JButton{
 			panels[j].setBackground(Color.white);
 			i++;
 			j++;
+		}
+	}
+	
+	public JLabel getLabel(int i) {
+		return this.labels[i];
+	}
+	
+	public Color getPieceColor(int i) {
+		if (i < this.getStackSize()) {
+			return stack.get(i).getColor();
+		}else {
+			return Color.white;
 		}
 	}
 	

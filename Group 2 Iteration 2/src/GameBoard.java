@@ -18,13 +18,14 @@ public class GameBoard extends JFrame implements ActionListener {
     private int numPlayers, rows, columns;
     private Color setupColor; //used to set the color of the piece that starts in each space at the beginning of the game
     private JButton quit, colorBlindButton;
-    private JLabel info;
+    private JLabel colorBlindInfo;
     private JLabel currentTurn;
     private GameSpace moveFrom; //space that has been selected to move from
     private GameSpace moveTo; //space that has been selected to move to
     private Boolean moveFromSelected; //true when a space has already been selected to move from, used to determine if a space has been selected to move from or move to
     private int turn; //current turn, 1 to 4
     private ArrayList<GamePiece> transferStack; //used when making moves
+    private Boolean colorBlindOn;
     
     public GameBoard(){
     	
@@ -33,12 +34,16 @@ public class GameBoard extends JFrame implements ActionListener {
     	moveFromSelected = false;
     	Random rand = new Random();
     	turn = rand.nextInt(4) + 1;
+    	colorBlindOn = false;
     	
     	topPanel = new JPanel();
     	//bottomPanel = new JPanel();
     	//rightPanel = new JPanel();
     	leftPanel = new JPanel();
     	gameBoard = new JPanel();
+    	colorBlindInfo = new JLabel(" ");
+		topPanel.add(colorBlindInfo);
+		colorBlindInfo.setVisible(true);
     	quit = new JButton("Quit");
     	colorBlindButton = new JButton("Toggle Color Defiency Settings");
     	colorBlindButton.addActionListener(this);
@@ -143,9 +148,36 @@ public class GameBoard extends JFrame implements ActionListener {
 			}
 		}
 		if(selected.equals(colorBlindButton)) {
-			info = new JLabel("Color Blind Mode is Active");
-			topPanel.add(info);
-			info.setVisible(true);
+			if (colorBlindOn.equals(false)) {
+				colorBlindOn = true;
+				colorBlindInfo.setText("Color Blind Mode is Active");
+				for (int y = 0; y < rows; y++) {
+			    	for (int x = 0 ; x < columns; x++) {
+			    		for (int i = 0; i < 5; i++) {
+			    			//Cannot invoke "javax.swing.JPanel.getBackground()" because "this.panels[<parameter1>]" is null
+			    			if (gameSpaces[x][y].getPieceColor(i).equals(Color.red)) {
+			    				gameSpaces[x][y].getLabel(i).setText("R");
+			    			}else if (gameSpaces[x][y].getPieceColor(i).equals(Color.cyan)) {
+			    				gameSpaces[x][y].getLabel(i).setText("B");
+			    			}else if (gameSpaces[x][y].getPieceColor(i).equals(Color.yellow)) {
+			    				gameSpaces[x][y].getLabel(i).setText("Y");
+			    			}else if (gameSpaces[x][y].getPieceColor(i).equals(Color.green)) {
+			    				gameSpaces[x][y].getLabel(i).setText("G");
+			    			}
+			    		}
+			    	}
+				}
+			}else {
+				colorBlindOn = false;
+				colorBlindInfo.setText(" ");
+				for (int y = 0; y < rows; y++) {
+			   		for (int x = 0 ; x < columns; x++) {
+			   			for (int i = 0; i < 5; i++) {
+			   				gameSpaces[x][y].getLabel(i).setText(" ");
+			    		}
+			    	}
+				}
+			}
 		}
 		if (selected instanceof GameSpace) {
 			if (moveFromSelected) {
