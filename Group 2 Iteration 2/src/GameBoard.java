@@ -1,13 +1,16 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.util.Random;
 import java.util.ArrayList;
 import java.lang.Math.*;
 
-public class GameBoard extends JFrame implements ActionListener {
+public class GameBoard extends JFrame implements ActionListener, MouseListener {
 	
     private JPanel topPanel;
     private JPanel leftPanel;
@@ -17,7 +20,7 @@ public class GameBoard extends JFrame implements ActionListener {
     private GameSpace [][] gameSpaces;
     private int numPlayers, rows, columns;
     private Color setupColor; //used to set the color of the piece that starts in each space at the beginning of the game
-    private JButton quit, colorBlindButton;
+    private JButton quit, colorBlindButton, save, load;
     private JLabel info;
     private JLabel currentTurn;
     private GameSpace moveFrom; //space that has been selected to move from
@@ -35,15 +38,19 @@ public class GameBoard extends JFrame implements ActionListener {
     	turn = rand.nextInt(4) + 1;
     	
     	topPanel = new JPanel();
-    	//bottomPanel = new JPanel();
-    	//rightPanel = new JPanel();
+    	bottomPanel = new JPanel();
+    	rightPanel = new JPanel();
     	leftPanel = new JPanel();
     	gameBoard = new JPanel();
     	quit = new JButton("Quit");
+    	save = new JButton("Save");
+    	load = new JButton("Load");
     	colorBlindButton = new JButton("Toggle Color Defiency Settings");
     	colorBlindButton.addActionListener(this);
     	quit.addActionListener(this);
     	currentTurn = new JLabel(this.getTurnColorString() + "'s turn");
+    	topPanel.add(save);
+    	topPanel.add(load);
     	topPanel.add(quit);
     	topPanel.add(colorBlindButton);
     	topPanel.add(currentTurn);
@@ -65,7 +72,7 @@ public class GameBoard extends JFrame implements ActionListener {
     			gameSpaces[x][y].setSize(20,20);
     			gameSpaces[x][y].setOpaque(true);
     			gameSpaces[x][y].setBorderPainted(true);
-    			gameSpaces[x][y].addActionListener(this);
+    			gameSpaces[x][y].addMouseListener(this);
     			if (gameSpaces[x][y].getColor() != Color.black) {
     				setupColor = gameSpaces[x][y].initialColor();
     				gameSpaces[x][y].addPiece(new GamePiece(setupColor));
@@ -76,8 +83,8 @@ public class GameBoard extends JFrame implements ActionListener {
     	}
     	getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(topPanel, BorderLayout.NORTH);
-		//getContentPane().add(bottomPanel, BorderLayout.SOUTH);
-		//getContentPane().add(rightPanel, BorderLayout.EAST);
+		getContentPane().add(bottomPanel, BorderLayout.SOUTH);
+		getContentPane().add(rightPanel, BorderLayout.EAST);
 		getContentPane().add(leftPanel, BorderLayout.WEST);
 		getContentPane().add(gameBoard, BorderLayout.CENTER);
 		
@@ -96,6 +103,8 @@ public class GameBoard extends JFrame implements ActionListener {
     	}
     	currentTurn.setText(this.getTurnColorString() + "'s turn");
     }
+    
+   
     
     public Color getTurnColor() {
     	// returns color of player whose turn it currently is
@@ -147,6 +156,13 @@ public class GameBoard extends JFrame implements ActionListener {
 			topPanel.add(info);
 			info.setVisible(true);
 		}
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		Object selected = e.getSource();
 		if (selected instanceof GameSpace) {
 			if (moveFromSelected) {
 				moveTo = (GameSpace) selected;
@@ -188,6 +204,30 @@ public class GameBoard extends JFrame implements ActionListener {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
     
