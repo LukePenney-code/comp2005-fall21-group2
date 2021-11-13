@@ -17,7 +17,7 @@ public class GameBoard extends JFrame implements ActionListener {
     private GameSpace [][] gameSpaces;
     private int numPlayers, rows, columns;
     private Color setupColor; //used to set the color of the piece that starts in each space at the beginning of the game
-    private JButton quit, colorBlindButton;
+    private JButton quit, colorBlindButton, save, load;
     private JLabel colorBlindInfo;
     private JLabel currentTurn;
     private GameSpace moveFrom; //space that has been selected to move from
@@ -48,10 +48,19 @@ public class GameBoard extends JFrame implements ActionListener {
     	colorBlindButton = new JButton("Toggle Color Defiency Settings");
     	colorBlindButton.addActionListener(this);
     	quit.addActionListener(this);
+    	save = new JButton("Save");
+    	save.addActionListener(e -> { save();} );
+    	load = new JButton("Load");
+    	load.addActionListener(e -> { load();});
+    	
+    	
+    	
     	currentTurn = new JLabel(this.getTurnColorString() + "'s turn");
     	topPanel.add(quit);
     	topPanel.add(colorBlindButton);
     	topPanel.add(currentTurn);
+    	topPanel.add(save);
+    	topPanel.add(load);
     	
     	
     	this.setSize(500,500);
@@ -135,6 +144,18 @@ public class GameBoard extends JFrame implements ActionListener {
     	}
     	return null;
     }
+    public void save() {
+    	SaveLoadGame data = new SaveLoadGame();
+    	try {
+    		ResourceManager.save(data, "1.save");
+    		
+    	} catch(Exception e1) {
+    		System.out.println("Could not save" + e1.getMessage());
+    	}
+    }
+    public void load() {
+    	
+    }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -143,8 +164,11 @@ public class GameBoard extends JFrame implements ActionListener {
 		if(selected.equals(quit)) {
 			String response = JOptionPane.showInputDialog(gameBoard, "Would You Like To Save? \n Type 'yes' or 'no'");
 			response.toLowerCase();
-			if(response.equals(response)) {
+			if(response.equals("no")) {
 				System.exit(0);
+			}
+			if(response.equals("yes")) {
+				save();
 			}
 		}
 		if(selected.equals(colorBlindButton)) {
