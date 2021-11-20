@@ -70,7 +70,7 @@ public class GameBoard extends JFrame implements ActionListener {
     	//bottomPanel.setLayout(new FlowLayout());
     	
     	gameBoard.setLayout(new GridLayout(rows, columns));
-    	gameBoard.setSize(500,500);
+    	gameBoard.setSize(800,800);
     	
     	gameSpaces = new GameSpace[rows][columns];
     	for (int y = 0; y < rows; y++) {
@@ -145,6 +145,11 @@ public class GameBoard extends JFrame implements ActionListener {
     	return null;
     }
     public void save() {
+		/*
+		 * JFrame popUp = new JFrame(); JTextBox saveField = new
+		 * JTextBox("Enter save name"); popUp.add(saveField); String saveName =
+		 * saveField.getText(); popUp.setVisible(true);
+		 */
     	SaveLoadGame data = new SaveLoadGame();
     	try {
     		ResourceManager.save(data, "1.save");
