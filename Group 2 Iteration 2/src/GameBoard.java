@@ -137,7 +137,7 @@ public class GameBoard extends JFrame implements ActionListener {
     		return "green";
     	}
     	if (turn == 3) {
-    		return "cyan";
+    		return "blue";
     	}
     	if (turn == 4) {
     		return "yellow";
@@ -162,29 +162,29 @@ public class GameBoard extends JFrame implements ActionListener {
     	
     }
     
-    public void toggleColorBlind() {
-    	if (colorBlindOn.equals(false)) {
-			colorBlindOn = true;
-			colorBlindInfo.setText("Color Blind Mode is Active");
+    public void setColorBlind() {
+    	if (colorBlindOn) {
 			for (int y = 0; y < rows; y++) {
 		    	for (int x = 0 ; x < columns; x++) {
-		    		for (int i = 0; i < 5; i++) {
-		    			//Cannot invoke "javax.swing.JPanel.getBackground()" because "this.panels[<parameter1>]" is null
-		    			if (gameSpaces[x][y].getPieceColor(i).equals(Color.red)) {
-		    				gameSpaces[x][y].getLabel(i).setText("R");
-		    			}else if (gameSpaces[x][y].getPieceColor(i).equals(Color.cyan)) {
-		    				gameSpaces[x][y].getLabel(i).setText("B");
-		    			}else if (gameSpaces[x][y].getPieceColor(i).equals(Color.yellow)) {
-		    				gameSpaces[x][y].getLabel(i).setText("Y");
-		    			}else if (gameSpaces[x][y].getPieceColor(i).equals(Color.green)) {
-		    				gameSpaces[x][y].getLabel(i).setText("G");
-		    			}
+		    		if (!(gameSpaces[x][y].getColor().equals(Color.black))) {
+			    		for (int i = 0; i < 5; i++) {
+			    			int j = (gameSpaces[x][y].getStackSize() - 1) - i;
+			    			if (gameSpaces[x][y].getPieceColor(i).equals(Color.red)) {
+			    				gameSpaces[x][y].getLabel(j).setText("R");
+			    			}else if (gameSpaces[x][y].getPieceColor(i).equals(Color.cyan)) {
+			    				gameSpaces[x][y].getLabel(j).setText("B");
+			    			}else if (gameSpaces[x][y].getPieceColor(i).equals(Color.yellow)) {
+			    				gameSpaces[x][y].getLabel(j).setText("Y");
+			    			}else if (gameSpaces[x][y].getPieceColor(i).equals(Color.green)) {
+			    				gameSpaces[x][y].getLabel(j).setText("G");
+			    			}else if (gameSpaces[x][y].getPieceColor(i).equals(Color.white)) {
+			    				gameSpaces[x][y].getLabel(i).setText(" ");
+			    			}
+			    		}
 		    		}
 		    	}
 			}
 		}else {
-			colorBlindOn = false;
-			colorBlindInfo.setText(" ");
 			for (int y = 0; y < rows; y++) {
 		   		for (int x = 0 ; x < columns; x++) {
 		   			if (!(gameSpaces[x][y].getColor().equals(Color.black))) {
@@ -212,7 +212,14 @@ public class GameBoard extends JFrame implements ActionListener {
 			}
 		}
 		if(selected.equals(colorBlindButton)) {
-			this.toggleColorBlind();
+			if (colorBlindOn) {
+				colorBlindOn = false;
+				colorBlindInfo.setText(" ");
+			}else {
+				colorBlindOn = true;
+				colorBlindInfo.setText("Color Blind Mode is Active");
+			}
+			this.setColorBlind();
 		}
 		if (selected instanceof GameSpace) {
 			if (moveFromSelected) {
@@ -244,6 +251,7 @@ public class GameBoard extends JFrame implements ActionListener {
 						moveFrom.update();
 						moveTo.update();
 						this.nextTurn();
+						this.setColorBlind();
 					}
 				}
 			}else {
