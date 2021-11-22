@@ -161,6 +161,41 @@ public class GameBoard extends JFrame implements ActionListener {
     public void load() {
     	
     }
+    
+    public void toggleColorBlind() {
+    	if (colorBlindOn.equals(false)) {
+			colorBlindOn = true;
+			colorBlindInfo.setText("Color Blind Mode is Active");
+			for (int y = 0; y < rows; y++) {
+		    	for (int x = 0 ; x < columns; x++) {
+		    		for (int i = 0; i < 5; i++) {
+		    			//Cannot invoke "javax.swing.JPanel.getBackground()" because "this.panels[<parameter1>]" is null
+		    			if (gameSpaces[x][y].getPieceColor(i).equals(Color.red)) {
+		    				gameSpaces[x][y].getLabel(i).setText("R");
+		    			}else if (gameSpaces[x][y].getPieceColor(i).equals(Color.cyan)) {
+		    				gameSpaces[x][y].getLabel(i).setText("B");
+		    			}else if (gameSpaces[x][y].getPieceColor(i).equals(Color.yellow)) {
+		    				gameSpaces[x][y].getLabel(i).setText("Y");
+		    			}else if (gameSpaces[x][y].getPieceColor(i).equals(Color.green)) {
+		    				gameSpaces[x][y].getLabel(i).setText("G");
+		    			}
+		    		}
+		    	}
+			}
+		}else {
+			colorBlindOn = false;
+			colorBlindInfo.setText(" ");
+			for (int y = 0; y < rows; y++) {
+		   		for (int x = 0 ; x < columns; x++) {
+		   			if (!(gameSpaces[x][y].getColor().equals(Color.black))) {
+		   				for (int i = 0; i < 5; i++) {
+		   					gameSpaces[x][y].getLabel(i).setText(" ");
+		   				}
+		    		}
+		    	}
+			}
+		}
+    }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -177,36 +212,7 @@ public class GameBoard extends JFrame implements ActionListener {
 			}
 		}
 		if(selected.equals(colorBlindButton)) {
-			if (colorBlindOn.equals(false)) {
-				colorBlindOn = true;
-				colorBlindInfo.setText("Color Blind Mode is Active");
-				for (int y = 0; y < rows; y++) {
-			    	for (int x = 0 ; x < columns; x++) {
-			    		for (int i = 0; i < 5; i++) {
-			    			//Cannot invoke "javax.swing.JPanel.getBackground()" because "this.panels[<parameter1>]" is null
-			    			if (gameSpaces[x][y].getPieceColor(i).equals(Color.red)) {
-			    				gameSpaces[x][y].getLabel(i).setText("R");
-			    			}else if (gameSpaces[x][y].getPieceColor(i).equals(Color.cyan)) {
-			    				gameSpaces[x][y].getLabel(i).setText("B");
-			    			}else if (gameSpaces[x][y].getPieceColor(i).equals(Color.yellow)) {
-			    				gameSpaces[x][y].getLabel(i).setText("Y");
-			    			}else if (gameSpaces[x][y].getPieceColor(i).equals(Color.green)) {
-			    				gameSpaces[x][y].getLabel(i).setText("G");
-			    			}
-			    		}
-			    	}
-				}
-			}else {
-				colorBlindOn = false;
-				colorBlindInfo.setText(" ");
-				for (int y = 0; y < rows; y++) {
-			   		for (int x = 0 ; x < columns; x++) {
-			   			for (int i = 0; i < 5; i++) {
-			   				gameSpaces[x][y].getLabel(i).setText(" ");
-			    		}
-			    	}
-				}
-			}
+			this.toggleColorBlind();
 		}
 		if (selected instanceof GameSpace) {
 			if (moveFromSelected) {
