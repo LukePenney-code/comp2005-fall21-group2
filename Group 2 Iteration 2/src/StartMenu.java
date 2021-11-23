@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.border.Border;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,27 +8,34 @@ import java.awt.event.ActionListener;
 public class StartMenu implements ActionListener{
 	private JLabel title,prompt;
 	private JFrame frame;
-	private JButton start,load,quit, easy, hard;
+	private JButton start,load,quit, easy, hard, easy2, hard2, easy3, hard3, easy4, hard4;
 	private ImageIcon logo;
 	
 	public StartMenu() {
 		
-		title = new JLabel("Domination");
-		prompt = new JLabel("What Difficulty would you like to play on?");
+		title = new JLabel("Domination!");
+		prompt = new JLabel("Player 1           Player 2           Player 3          Player 4");
 		frame = new JFrame("Start Menu");
-		frame.setSize(850,850);
+		frame.setSize(850,870);
 		frame.setVisible(true);
 		logo = new ImageIcon("C://Users//Luke Penney//Pictures//pixlr-bg-result (1).png");
 		setUpLabel(frame,title,prompt,logo);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		start = new JButton("Start");
+		start = new JButton();
 		load = new JButton("Load");
 		quit = new JButton("Quit");
 		setUpButtons(frame,start, load, quit);
 		hard = new JButton("Hard");
 		easy = new JButton("Easy");
-		difficultySetting(frame, easy, hard);
+		easy2 = new JButton("Easy");
+		hard2 = new JButton("Hard");
+		easy3 = new JButton("Easy");
+		hard3 = new JButton("Hard");
+		easy4 = new JButton("Easy");
+		hard4 = new JButton("Hard");
+		
+		difficultySetting(frame, easy, hard, easy2, hard2, easy3, hard3, easy4, hard4);
 		
 		
 		
@@ -38,26 +47,92 @@ public class StartMenu implements ActionListener{
 
 	private void setUpButtons(JFrame frame, JButton start, JButton load, JButton quit) {
 		// TODO Auto-generated method stub
+		ImageIcon startIcon = new ImageIcon("C://Users//Luke Penney//Pictures//red-start-png-5.png");
 		load.setBounds(20, 300, 100, 100);
 		frame.getContentPane().add(load);
 		load.setBackground(Color.RED);
-		quit.setBounds(20, 400, 100, 100);
+		load.setFont(new Font("Bahaus 93", Font.PLAIN,20));
+		quit.setBounds(20, 410, 100, 100);
 		frame.getContentPane().add(quit);
 		quit.setBackground(Color.RED);
-		start.setBounds(700, 600, 100, 100);
+		quit.setFont(new Font("Bahaus 93", Font.PLAIN,20));
+		quit.addActionListener(this);
+		start.setBounds(700, 550, 110, 100);
+		start.setIcon(startIcon);
 		frame.getContentPane().add(start);
-		start.setBackground(Color.RED);
+		start.setBackground(Color.YELLOW);
 		start.addActionListener(this);
+		Border emptyBorder = BorderFactory.createEmptyBorder();
+		start.setBorder(emptyBorder);
+		quit.setBorder(emptyBorder);
+		load.setBorder(emptyBorder);
 	}
 	
-	private void difficultySetting(JFrame frame, JButton easy, JButton hard) {
-		easy.setBounds(200, 700, 200, 100);
+	private void difficultySetting(JFrame frame, JButton easy, JButton hard, JButton easy2, JButton hard2, JButton easy3, JButton hard3, JButton easy4, JButton hard4) {
+		
+		//Player 1 setup
+		JButton human = new JButton("Human");
+		human.setBounds(49, 760, 77, 60);
+		frame.getContentPane().add(human);
+		human.setBackground(Color.red);
+		human.setFont(new Font("Bahaus 93", Font.BOLD,12));
+		
+		easy.setBounds(24, 700, 60, 60);
 		frame.getContentPane().add(easy);
-		hard.setBounds(410, 700, 200, 100);
+		hard.setBounds(84, 700, 60, 60);
 		frame.getContentPane().add(hard);
 		easy.setBackground(Color.red);
 		hard.setBackground(Color.red);
+		easy.setFont(new Font("Bahaus 93", Font.BOLD,11));
+		hard.setFont(new Font("Bahaus 93", Font.BOLD,11));
 		
+		//Player 2 setup
+		JButton human2 = new JButton("Human");
+		human2.setBounds(200, 760, 77, 60);
+		frame.getContentPane().add(human2);
+		human2.setBackground(Color.cyan);
+		human2.setFont(new Font("Bahaus 93", Font.BOLD,12));
+		
+		easy2.setBounds(180, 700, 60, 60);
+		frame.getContentPane().add(easy2);
+		hard2.setBounds(240, 700, 60, 60);
+		frame.getContentPane().add(hard2);
+		easy2.setBackground(Color.cyan);
+		hard2.setBackground(Color.cyan);
+		easy2.setFont(new Font("Bahaus 93", Font.BOLD,11));
+		hard2.setFont(new Font("Bahaus 93", Font.BOLD,11));
+		
+		//Player 3 setup
+		JButton human3 = new JButton("Human");
+		human3.setBounds(360, 760, 77, 60);
+		frame.getContentPane().add(human3);
+		human3.setBackground(Color.green);
+		human3.setFont(new Font("Bahaus 93", Font.BOLD,12));
+		
+		easy3.setBounds(340, 700, 60, 60);
+		frame.getContentPane().add(easy3);
+		hard3.setBounds(400, 700, 60, 60);
+		frame.getContentPane().add(hard3);
+		easy3.setBackground(Color.green);
+		hard3.setBackground(Color.green);
+		easy3.setFont(new Font("Bahaus 93", Font.BOLD,11));
+		hard3.setFont(new Font("Bahaus 93", Font.BOLD,11));
+		
+		//Player 4 setup
+		JButton human4 = new JButton("Human");
+		human4.setBounds(510, 760, 77, 60);
+		frame.getContentPane().add(human4);
+		human4.setBackground(new Color(220,220,0));
+		human4.setFont(new Font("Bahaus 93", Font.BOLD,12));
+		
+		easy4.setBounds(490, 700, 60, 60);
+		frame.getContentPane().add(easy4);
+		hard4.setBounds(550, 700, 60, 60);
+		frame.getContentPane().add(hard4);
+		easy4.setBackground(new Color(220,220,0));
+		hard4.setBackground(new Color(220,220,0));
+		easy4.setFont(new Font("Bahaus 93", Font.BOLD,11));
+		hard4.setFont(new Font("Bahaus 93", Font.BOLD,11));
 		
 	}
 
@@ -75,8 +150,8 @@ public class StartMenu implements ActionListener{
 		title.setForeground(Color.red);
 		title.setBounds(120, 1, 600, 600);
 		frame.setLayout(null);
-		frame.getContentPane().setBackground(Color.YELLOW);
-		prompt.setBounds(250, 650, 400, 50);
+		frame.getContentPane().setBackground(Color.yellow);
+		prompt.setBounds(50, 650, 580, 50);
 		prompt.setFont(new Font("MV Boli",Font.BOLD,16));
 		
 		
@@ -90,6 +165,10 @@ public class StartMenu implements ActionListener{
 		Object selected = e.getSource();
 		if(selected == start) {
 			new GameBoard();
+			frame.dispose();
+		}
+		
+		if(selected == quit) {
 			frame.dispose();
 		}
 		

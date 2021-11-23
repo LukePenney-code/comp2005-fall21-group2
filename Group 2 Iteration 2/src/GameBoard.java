@@ -38,7 +38,7 @@ public class GameBoard extends JFrame implements ActionListener {
     	
     	topPanel = new JPanel();
     	//bottomPanel = new JPanel();
-    	//rightPanel = new JPanel();
+    	rightPanel = new JPanel();
     	leftPanel = new JPanel();
     	gameBoard = new JPanel();
     	colorBlindInfo = new JLabel(" ");
@@ -84,6 +84,7 @@ public class GameBoard extends JFrame implements ActionListener {
     				setupColor = gameSpaces[x][y].initialColor();
     				gameSpaces[x][y].addPiece(new GamePiece(setupColor));
     				gameSpaces[x][y].update();
+    			
     			}
     			gameBoard.add(gameSpaces[x][y]);
     		}
@@ -91,7 +92,7 @@ public class GameBoard extends JFrame implements ActionListener {
     	getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(topPanel, BorderLayout.NORTH);
 		//getContentPane().add(bottomPanel, BorderLayout.SOUTH);
-		//getContentPane().add(rightPanel, BorderLayout.EAST);
+		getContentPane().add(rightPanel, BorderLayout.EAST);
 		getContentPane().add(leftPanel, BorderLayout.WEST);
 		getContentPane().add(gameBoard, BorderLayout.CENTER);
 		
