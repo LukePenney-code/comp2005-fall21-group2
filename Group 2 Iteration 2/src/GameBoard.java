@@ -161,6 +161,7 @@ public class GameBoard extends JFrame implements ActionListener {
     }
     public void load() {
     	
+    	
     }
     
     public void setColorBlind() {

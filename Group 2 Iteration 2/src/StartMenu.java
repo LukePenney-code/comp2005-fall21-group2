@@ -4,9 +4,11 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class StartMenu implements ActionListener{
-	private JLabel title,prompt;
+public class StartMenu implements ActionListener, KeyListener{
+	private JLabel title,prompt, info;
 	private JFrame frame;
 	private JButton start,load,quit, easy, hard, easy2, hard2, easy3, hard3, easy4, hard4;
 	private ImageIcon logo;
@@ -15,11 +17,12 @@ public class StartMenu implements ActionListener{
 		
 		title = new JLabel("Domination!");
 		prompt = new JLabel("Player 1           Player 2           Player 3          Player 4");
+		info = new JLabel("Press 'i' for the rules");
 		frame = new JFrame("Start Menu");
 		frame.setSize(850,870);
 		frame.setVisible(true);
-		logo = new ImageIcon("C://Users//Luke Penney//Pictures//pixlr-bg-result (1).png");
-		setUpLabel(frame,title,prompt,logo);
+		logo = new ImageIcon("workingLogo.png");
+		setUpLabel(frame,title,prompt,info,logo);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		start = new JButton();
@@ -36,6 +39,8 @@ public class StartMenu implements ActionListener{
 		hard4 = new JButton("Hard");
 		
 		difficultySetting(frame, easy, hard, easy2, hard2, easy3, hard3, easy4, hard4);
+		groupMemberNames();
+		frame.addKeyListener(this);
 		
 		
 		
@@ -47,7 +52,7 @@ public class StartMenu implements ActionListener{
 
 	private void setUpButtons(JFrame frame, JButton start, JButton load, JButton quit) {
 		// TODO Auto-generated method stub
-		ImageIcon startIcon = new ImageIcon("C://Users//Luke Penney//Pictures//red-start-png-5.png");
+		ImageIcon startIcon = new ImageIcon("start.png");
 		load.setBounds(20, 300, 100, 100);
 		frame.getContentPane().add(load);
 		load.setBackground(Color.RED);
@@ -138,7 +143,7 @@ public class StartMenu implements ActionListener{
 
 
 
-	private void setUpLabel(JFrame frame, JLabel title, JLabel prompt, ImageIcon logo) {
+	private void setUpLabel(JFrame frame, JLabel title, JLabel prompt, JLabel info, ImageIcon logo) {
 		// TODO Auto-generated method stub
 		title.setIcon(logo);
 		frame.add(title);
@@ -153,8 +158,35 @@ public class StartMenu implements ActionListener{
 		frame.getContentPane().setBackground(Color.yellow);
 		prompt.setBounds(50, 650, 580, 50);
 		prompt.setFont(new Font("MV Boli",Font.BOLD,16));
+		frame.getContentPane().add(info);
+		info.setBounds(650, 160, 150, 20);
+		info.setFont(new Font("Times new roman",Font.BOLD,16));
+		info.setForeground(Color.red);
 		
 		
+	}
+	
+	public void groupMemberNames() {
+		JLabel luke = new JLabel("Luke");
+		JLabel evan = new JLabel("Evan");
+		JLabel farhan = new JLabel("Farhan");
+		JLabel raveen = new JLabel("Raveen");
+		frame.getContentPane().add(raveen);
+		frame.getContentPane().add(luke);
+		frame.getContentPane().add(evan);
+		frame.getContentPane().add(farhan);
+		luke.setBounds(20, 30, 100, 100);
+		luke.setForeground(Color.red);
+		luke.setFont(new Font("Algerian", Font.BOLD, 16));
+		evan.setBounds(20, 50, 100, 100);
+		evan.setForeground(Color.red);
+		evan.setFont(new Font("Algerian", Font.BOLD, 16));
+		farhan.setBounds(20, 70, 100, 100);
+		farhan.setForeground(Color.red);
+		farhan.setFont(new Font("Algerian", Font.BOLD, 16));
+		raveen.setBounds(20, 90, 100, 100);
+		raveen.setForeground(Color.red);
+		raveen.setFont(new Font("Algerian", Font.BOLD, 16));
 	}
 
 
@@ -171,6 +203,45 @@ public class StartMenu implements ActionListener{
 		if(selected == quit) {
 			frame.dispose();
 		}
+		
+	}
+
+
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+		
+		
+		
+		
+	}
+
+
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		switch(e.getKeyCode()){
+		case 73 : JFrame infoMenu = new JFrame("Rules");
+		           infoMenu.setSize(500,700);
+				   infoMenu.setVisible(true);
+				   
+		//case 27 : frame.dispose();
+		}
+		if(e.getKeyCode() == 27) {
+			frame.dispose();
+		}
+		
+		
+	}
+
+
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
 		
 	}
 	
