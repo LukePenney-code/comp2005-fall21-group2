@@ -19,7 +19,7 @@ public class GameBoard extends JFrame implements ActionListener {
     private Color setupColor; //used to set the color of the piece that starts in each space at the beginning of the game
     private Color defaultButtonColor; //used when button is selected/deselected
     private JButton quit, colorBlindButton, save, load, reserve;
-    private JLabel colorBlindInfo, currentTurn, reserveInfo, colorKey;
+    private JLabel colorBlindInfo, currentTurn, reserveInfo, colorKey, declareWinner;
     private GameSpace moveFrom; //space that has been selected to move from
     private GameSpace moveTo; //space that has been selected to move to
     private boolean moveFromSelected; //true when a space has already been selected to move from, used to determine if a space has been selected to move from or move to
@@ -29,6 +29,7 @@ public class GameBoard extends JFrame implements ActionListener {
     private Player currentPlayer;
     private Player[] players;
     private int noMoveCount; //Counts how many players in a row cannot move. If 3 players cannot move the 4th player wins.
+    private boolean gameWon; //stops moves from being made if the game has ended
     
     public GameBoard(){
     	
@@ -38,6 +39,7 @@ public class GameBoard extends JFrame implements ActionListener {
     	Random rand = new Random();
     	colorBlindOn = false;
     	noMoveCount = 0;
+    	gameWon = false;
     	
     	turn = rand.nextInt(4);
     	players = new Player[4];
@@ -52,9 +54,10 @@ public class GameBoard extends JFrame implements ActionListener {
     	rightPanel = new JPanel();
     	leftPanel = new JPanel();
     	gameBoard = new JPanel();
+    	declareWinner = new JLabel(" ");
+		topPanel.add(declareWinner);
     	colorBlindInfo = new JLabel(" ");
 		topPanel.add(colorBlindInfo);
-		colorBlindInfo.setVisible(true);
     	quit = new JButton("Quit");
     	colorBlindButton = new JButton("Toggle Color Defiency Settings");
     	colorBlindButton.addActionListener(this);
@@ -133,25 +136,35 @@ public class GameBoard extends JFrame implements ActionListener {
     	}
     	currentPlayer = players[turn];
     	if (noMoveCount == 3) {
-    		this.declareWinner();
+    		declareWinner.setText(this.getTurnColorString() + " wins!");
+        	currentTurn.setText("Click Reset to play again");
+        	gameWon = true;
     	}else {
 	    	if (!(this.isMovePossible())) {
 	    		noMoveCount++;
 	    		this.nextTurn();
 	    	}
-	    	currentTurn.setText(this.getTurnColorString() + "'s turn");
+	    	if (!(gameWon)) {
+	    		noMoveCount = 0;
+		    	currentTurn.setText(this.getTurnColorString() + "'s turn");
+	    	}
     	}
     }
     
     public boolean isMovePossible() {
-    	//finish this
-    	return true; //placeholder
-    }
-    
-    public void declareWinner() {
-    	colorBlindInfo.setText(this.getTurnColorString() + " wins!");
-    	currentTurn.setText("Click Reset to play again");
-    	// gameWon = true, use this to stop button clicks
+    	if (currentPlayer.getReserve() > 0) {
+    		return true; //player can move if they have reserve
+    	}
+    	for (int y = 0; y < rows; y++) {
+	    	for (int x = 0 ; x < columns; x++) {
+	    		if (gameSpaces[x][y].getStackSize() > 0) {
+	    			if (gameSpaces[x][y].topPiece().getColor().equals(currentPlayer.getColor())) {
+	    				return true; //player has no reserve but they top a space so they can move
+	    			}
+	    		}
+	    	}
+    	}
+    	return false; //player has no reserve and tops no spaces, no moves are possible
     }
     
     public Color getTurnColor() {
@@ -257,71 +270,75 @@ public class GameBoard extends JFrame implements ActionListener {
 			this.setColorBlind();
 		}
 		if (selected.equals(reserve)) {
-			if (!(moveFromSelected) && reserve.getBackground().equals(defaultButtonColor) && (currentPlayer.getReserve() > 0)) {
-				reserve.setBackground(Color.gray);
-				moveFromSelected = true;
-			}else if (moveFromSelected && reserve.getBackground().equals(Color.gray)) {
-				reserve.setBackground(defaultButtonColor);
-				moveFromSelected = false;
+			if (!(gameWon)) {
+				if (!(moveFromSelected) && reserve.getBackground().equals(defaultButtonColor) && (currentPlayer.getReserve() > 0)) {
+					reserve.setBackground(Color.gray);
+					moveFromSelected = true;
+				}else if (moveFromSelected && reserve.getBackground().equals(Color.gray)) {
+					reserve.setBackground(defaultButtonColor);
+					moveFromSelected = false;
+				}
 			}
 		}
 		if (selected instanceof GameSpace) {
-			if (moveFromSelected) {
-				moveTo = (GameSpace) selected;
-				if (!(moveTo.getColor().equals(Color.black))) {
-					if (reserve.getBackground().equals(Color.gray)) {
-						//make reserve move
-						reserve.setBackground(defaultButtonColor);
-						moveFromSelected = false;
-						currentPlayer.decrementReserve();
-						moveTo.addPiece(new GamePiece(currentPlayer.getColor()));
-						int toReserve = moveTo.updateStack(this.getTurnColor()); //updateStack must come before updateVisual
-						currentPlayer.incrementReserve(toReserve);
-						moveTo.updateVisual();
-						this.updateReserveInfo();
-						this.nextTurn();
-						this.setColorBlind();
-					}else if (moveTo.equals(moveFrom)) {
-						//unselect space
-						moveFromSelected = false;
-						moveFrom.setBackground(Color.white);
-					}else {
-						//space has been selected to move to
-						int xDist = Math.abs(moveTo.getXcoord() - moveFrom.getXcoord());
-						int yDist = Math.abs(moveTo.getYcoord() - moveFrom.getYcoord());
-						int distance = xDist + yDist;
-						if ((distance <= moveFrom.getStackSize()) && ((xDist == 0) || (yDist == 0))) {
+			if (!(gameWon)) {
+				if (moveFromSelected) {
+					moveTo = (GameSpace) selected;
+					if (!(moveTo.getColor().equals(Color.black))) {
+						if (reserve.getBackground().equals(Color.gray)) {
+							//make reserve move
+							reserve.setBackground(defaultButtonColor);
 							moveFromSelected = false;
-							moveFrom.setBackground(Color.white);
-							transferStack = new ArrayList<GamePiece>();
-							int i = 0;
-							while (i < distance) {
-								transferStack.add(moveFrom.topPiece());
-								moveFrom.removeTop();
-								i++;
-							}
-							i--;
-							while (i >= 0) {
-								moveTo.addPiece(transferStack.get(i));
-								i--;
-							}
-							moveFrom.updateVisual();
-							int toReserve = moveTo.updateStack(this.getTurnColor());
+							currentPlayer.decrementReserve();
+							moveTo.addPiece(new GamePiece(currentPlayer.getColor()));
+							int toReserve = moveTo.updateStack(this.getTurnColor()); //updateStack must come before updateVisual
 							currentPlayer.incrementReserve(toReserve);
 							moveTo.updateVisual();
 							this.updateReserveInfo();
 							this.nextTurn();
 							this.setColorBlind();
+						}else if (moveTo.equals(moveFrom)) {
+							//unselect space
+							moveFromSelected = false;
+							moveFrom.setBackground(Color.white);
+						}else {
+							//space has been selected to move to
+							int xDist = Math.abs(moveTo.getXcoord() - moveFrom.getXcoord());
+							int yDist = Math.abs(moveTo.getYcoord() - moveFrom.getYcoord());
+							int distance = xDist + yDist;
+							if ((distance <= moveFrom.getStackSize()) && ((xDist == 0) || (yDist == 0))) {
+								moveFromSelected = false;
+								moveFrom.setBackground(Color.white);
+								transferStack = new ArrayList<GamePiece>();
+								int i = 0;
+								while (i < distance) {
+									transferStack.add(moveFrom.topPiece());
+									moveFrom.removeTop();
+									i++;
+								}
+								i--;
+								while (i >= 0) {
+									moveTo.addPiece(transferStack.get(i));
+									i--;
+								}
+								moveFrom.updateVisual();
+								int toReserve = moveTo.updateStack(this.getTurnColor());
+								currentPlayer.incrementReserve(toReserve);
+								moveTo.updateVisual();
+								this.updateReserveInfo();
+								this.nextTurn();
+								this.setColorBlind();
+							}
 						}
 					}
-				}
-			}else {
-				//space has been selected to move from
-				moveFrom = (GameSpace) selected;
-				if (!(moveFrom.getColor().equals(Color.black)) && (moveFrom.getStackSize() > 0)) {
-					if (moveFrom.topPiece().getColor().equals(this.getTurnColor())) {
-						moveFromSelected = true;
-						moveFrom.setBackground(Color.gray);
+				}else {
+					//space has been selected to move from
+					moveFrom = (GameSpace) selected;
+					if (!(moveFrom.getColor().equals(Color.black)) && (moveFrom.getStackSize() > 0)) {
+						if (moveFrom.topPiece().getColor().equals(this.getTurnColor())) {
+							moveFromSelected = true;
+							moveFrom.setBackground(Color.gray);
+						}
 					}
 				}
 			}
