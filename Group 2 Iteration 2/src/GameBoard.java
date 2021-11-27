@@ -28,6 +28,7 @@ public class GameBoard extends JFrame implements ActionListener {
     private boolean colorBlindOn;
     private Player currentPlayer;
     private Player[] players;
+    private int noMoveCount; //Counts how many players in a row cannot move. If 3 players cannot move the 4th player wins.
     
     public GameBoard(){
     	
@@ -36,6 +37,7 @@ public class GameBoard extends JFrame implements ActionListener {
     	moveFromSelected = false;
     	Random rand = new Random();
     	colorBlindOn = false;
+    	noMoveCount = 0;
     	
     	turn = rand.nextInt(4);
     	players = new Player[4];
@@ -130,7 +132,26 @@ public class GameBoard extends JFrame implements ActionListener {
     		turn++;
     	}
     	currentPlayer = players[turn];
-    	currentTurn.setText(this.getTurnColorString() + "'s turn");
+    	if (noMoveCount == 3) {
+    		this.declareWinner();
+    	}else {
+	    	if (!(this.isMovePossible())) {
+	    		noMoveCount++;
+	    		this.nextTurn();
+	    	}
+	    	currentTurn.setText(this.getTurnColorString() + "'s turn");
+    	}
+    }
+    
+    public boolean isMovePossible() {
+    	//finish this
+    	return true; //placeholder
+    }
+    
+    public void declareWinner() {
+    	colorBlindInfo.setText(this.getTurnColorString() + " wins!");
+    	currentTurn.setText("Click Reset to play again");
+    	// gameWon = true, use this to stop button clicks
     }
     
     public Color getTurnColor() {
