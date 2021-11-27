@@ -26,4 +26,8 @@ public class Player {
 	public void decrementReserve() {
 		reserve--;
 	}
+	
+	public int getType() {
+		return this.type;
+	}
 }

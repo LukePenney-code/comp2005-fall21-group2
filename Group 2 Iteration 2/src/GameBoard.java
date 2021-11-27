@@ -4,7 +4,6 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.util.Random;
-import java.util.ArrayList;
 import java.lang.Math.*;
 
 public class GameBoard extends JFrame implements ActionListener {
@@ -24,12 +23,12 @@ public class GameBoard extends JFrame implements ActionListener {
     private GameSpace moveTo; //space that has been selected to move to
     private boolean moveFromSelected; //true when a space has already been selected to move from, used to determine if a space has been selected to move from or move to
     private int turn; //current turn, 0 to 3
-    private ArrayList<GamePiece> transferStack; //used when making moves
     private boolean colorBlindOn;
     private Player currentPlayer;
     private Player[] players;
     private int noMoveCount; //Counts how many players in a row cannot move. If 3 players cannot move the 4th player wins.
     private boolean gameWon; //stops moves from being made if the game has ended
+    private MoveHandler moveHandler;
     
     public GameBoard(){
     	
@@ -40,6 +39,7 @@ public class GameBoard extends JFrame implements ActionListener {
     	colorBlindOn = false;
     	noMoveCount = 0;
     	gameWon = false;
+    	moveHandler = new MoveHandler();
     	
     	turn = rand.nextInt(4);
     	players = new Player[4];
@@ -137,7 +137,7 @@ public class GameBoard extends JFrame implements ActionListener {
     	currentPlayer = players[turn];
     	if (noMoveCount == 3) {
     		declareWinner.setText(this.getTurnColorString() + " wins!");
-        	currentTurn.setText("Click Reset to play again");
+        	currentTurn.setText("Click New Game to play again");
         	gameWon = true;
     	}else {
 	    	if (!(this.isMovePossible())) {
@@ -147,6 +147,9 @@ public class GameBoard extends JFrame implements ActionListener {
 	    	if (!(gameWon)) {
 	    		noMoveCount = 0;
 		    	currentTurn.setText(this.getTurnColorString() + "'s turn");
+		    	if (!(currentPlayer.getType() == 1)) {
+		    		this.moveAI();
+		    	}
 	    	}
     	}
     }
@@ -241,6 +244,10 @@ public class GameBoard extends JFrame implements ActionListener {
 			}
 		}
     }
+    
+    public void moveAI() {
+    	//finish this
+    }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -289,11 +296,7 @@ public class GameBoard extends JFrame implements ActionListener {
 							//make reserve move
 							reserve.setBackground(defaultButtonColor);
 							moveFromSelected = false;
-							currentPlayer.decrementReserve();
-							moveTo.addPiece(new GamePiece(currentPlayer.getColor()));
-							int toReserve = moveTo.updateStack(this.getTurnColor()); //updateStack must come before updateVisual
-							currentPlayer.incrementReserve(toReserve);
-							moveTo.updateVisual();
+							moveHandler.makeReserveMove(moveTo, currentPlayer);
 							this.updateReserveInfo();
 							this.nextTurn();
 							this.setColorBlind();
@@ -309,22 +312,7 @@ public class GameBoard extends JFrame implements ActionListener {
 							if ((distance <= moveFrom.getStackSize()) && ((xDist == 0) || (yDist == 0))) {
 								moveFromSelected = false;
 								moveFrom.setBackground(Color.white);
-								transferStack = new ArrayList<GamePiece>();
-								int i = 0;
-								while (i < distance) {
-									transferStack.add(moveFrom.topPiece());
-									moveFrom.removeTop();
-									i++;
-								}
-								i--;
-								while (i >= 0) {
-									moveTo.addPiece(transferStack.get(i));
-									i--;
-								}
-								moveFrom.updateVisual();
-								int toReserve = moveTo.updateStack(this.getTurnColor());
-								currentPlayer.incrementReserve(toReserve);
-								moveTo.updateVisual();
+								moveHandler.makeMove(moveTo, moveFrom, currentPlayer, distance);
 								this.updateReserveInfo();
 								this.nextTurn();
 								this.setColorBlind();
@@ -345,11 +333,3 @@ public class GameBoard extends JFrame implements ActionListener {
 		}
 	}
 }
-    
-   
-
-	
-
-
-	
-	
