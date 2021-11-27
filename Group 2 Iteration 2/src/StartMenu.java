@@ -25,7 +25,7 @@ public class StartMenu implements ActionListener, KeyListener{
 		setUpLabel(frame,title,prompt,info,logo);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		start = new JButton();
+		start = new JButton("Start");
 		load = new JButton("Load");
 		quit = new JButton("Quit");
 		setUpButtons(frame,start, load, quit);
@@ -52,7 +52,7 @@ public class StartMenu implements ActionListener, KeyListener{
 
 	private void setUpButtons(JFrame frame, JButton start, JButton load, JButton quit) {
 		// TODO Auto-generated method stub
-		ImageIcon startIcon = new ImageIcon("start.png");
+		//ImageIcon startIcon = new ImageIcon("start.png");
 		load.setBounds(20, 300, 100, 100);
 		frame.getContentPane().add(load);
 		load.setBackground(Color.RED);
@@ -63,9 +63,10 @@ public class StartMenu implements ActionListener, KeyListener{
 		quit.setFont(new Font("Bahaus 93", Font.PLAIN,20));
 		quit.addActionListener(this);
 		start.setBounds(700, 550, 110, 100);
-		start.setIcon(startIcon);
+		//start.setIcon(startIcon);
 		frame.getContentPane().add(start);
-		start.setBackground(Color.YELLOW);
+		start.setBackground(Color.RED);
+		start.setFont(new Font("Bahaus 93", Font.PLAIN,20));
 		start.addActionListener(this);
 		Border emptyBorder = BorderFactory.createEmptyBorder();
 		start.setBorder(emptyBorder);
