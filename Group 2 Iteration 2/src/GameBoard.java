@@ -45,9 +45,9 @@ public class GameBoard extends JFrame implements ActionListener {
     	turn = rand.nextInt(4);
     	players = new Player[4];
     	players[0] = new Player(1, Color.red);
-    	players[1] = new Player(0, Color.green);
+    	players[1] = new Player(1, Color.green);
     	players[2] = new Player(0, Color.cyan);
-    	players[3] = new Player(0, Color.yellow);
+    	players[3] = new Player(1, Color.yellow);
     	currentPlayer = players[turn];
     	
     	topPanel = new JPanel();
@@ -273,7 +273,7 @@ public class GameBoard extends JFrame implements ActionListener {
     	}
     	if (chooseMoveFrom == fromX.size()) {
     		//make reserve move
-    		chooseMoveTo = rand.nextInt(52);
+    		chooseMoveTo = rand.nextInt(52); //There are 52 white spaces and 12 black. This chooses a white space.
     		int i = 0;
     		for (int y = 0; y < rows; y++) {
     	   		for (int x = 0 ; x < columns; x++) {
@@ -296,27 +296,36 @@ public class GameBoard extends JFrame implements ActionListener {
     		boolean valid = false;
     		int distance = 0;
     		while (!(valid)) {
+    			System.out.print("in while\n");
     			distance = (rand.nextInt(moveFrom.getStackSize()) + 1);
         		int direction = rand.nextInt(4);
     			if (direction == 0) {
-    				if (!(gameSpaces[x + distance][y].getColor().equals(Color.black))) {
-    					valid = true;
-    					moveTo = gameSpaces[x + distance][y];
+    				if ((x + distance) < 8) {
+	    				if (!(gameSpaces[x + distance][y].getColor().equals(Color.black))) {
+	    					valid = true;
+	    					moveTo = gameSpaces[x + distance][y];
+	    				}
     				}
     			}else if (direction == 1) {
-    				if (!(gameSpaces[x - distance][y].getColor().equals(Color.black))) {
-    					valid = true;
-    					moveTo = gameSpaces[x - distance][y];
+    				if ((x - distance) >= 0) {
+	    				if (!(gameSpaces[x - distance][y].getColor().equals(Color.black))) {
+	    					valid = true;
+	    					moveTo = gameSpaces[x - distance][y];
+	    				}
     				}
     			}else if (direction == 2) {
-    				if (!(gameSpaces[x][y + distance].getColor().equals(Color.black))) {
-    					valid = true;
-    					moveTo = gameSpaces[x][y + distance];
+    				if ((y + distance) < 8) {
+	    				if (!(gameSpaces[x][y + distance].getColor().equals(Color.black))) {
+	    					valid = true;
+	    					moveTo = gameSpaces[x][y + distance];
+	    				}
     				}
     			}else {
-    				if (!(gameSpaces[x][y - distance].getColor().equals(Color.black))) {
-    					valid = true;
-    					moveTo = gameSpaces[x][y - distance];
+    				if ((y - distance) >= 0) {
+	    				if (!(gameSpaces[x][y - distance].getColor().equals(Color.black))) {
+	    					valid = true;
+	    					moveTo = gameSpaces[x][y - distance];
+	    				}
     				}
     			}
     		}
