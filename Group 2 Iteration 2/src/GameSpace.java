@@ -33,8 +33,7 @@ public class GameSpace extends JButton{
 			while (i < 5) {
 				panels[i] = new JPanel();
 				labels[i] = new JLabel(" ");
-				labels[i].setFont(new Font("Serif", Font.PLAIN, 7));
-				panels[i].setSize(4, 4);
+				labels[i].setFont(new Font("Serif", Font.BOLD, 7));
 				panels[i].setBackground(Color.white);
 				panels[i].add(labels[i]);
 				this.add(panels[i]);
@@ -86,14 +85,19 @@ public class GameSpace extends JButton{
 		return this.getBackground();
 	}
 	
-	
-	
-	public void update() {
-		//deal with oversized stack
+	public int updateStack(Color currentTurnColor) {
+		//Deals with oversized stack. Returns the number of pieces to add to reserve.
+		int toReturn = 0;
 		while (this.getStackSize() > 5) {
+			if (this.getPieceColor(0).equals(currentTurnColor)) {
+				toReturn++;
+			}
 			this.removeBot();
 		}
-		//update panel colors
+		return toReturn;
+	}
+	public void updateVisual() {
+		//Update panel colors
 		int i = this.getStackSize() - 1;
 		int j = 0;
 		while (i >= 0) {
