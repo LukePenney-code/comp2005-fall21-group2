@@ -223,16 +223,19 @@ public class StartMenu implements ActionListener, KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
+		JFrame infoMenu = new JFrame("Rules");
 		switch(e.getKeyCode()){
-		case 73 : JFrame infoMenu = new JFrame("Rules");
+		case 73 : 
 		           infoMenu.setSize(500,700);
 				   infoMenu.setVisible(true);
 				   
-		//case 27 : frame.dispose();
+		
 		}
 		if(e.getKeyCode() == 27) {
 			frame.dispose();
 		}
+		
+		
 		
 		
 	}
