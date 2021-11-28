@@ -12,6 +12,9 @@ public class StartMenu implements ActionListener, KeyListener{
 	private JFrame frame;
 	private JButton start,load,quit, easy, hard, easy2, hard2, easy3, hard3, easy4, hard4;
 	private ImageIcon logo;
+	private Player[] gamePlayers;
+	private GameBoard board;
+	
 	
 	public StartMenu() {
 		
@@ -24,6 +27,10 @@ public class StartMenu implements ActionListener, KeyListener{
 		logo = new ImageIcon("workingLogo.png");
 		setUpLabel(frame,title,prompt,info,logo);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		board = new GameBoard();
+		board.turnOffVisibilty();
+		board.dispose();
+		gamePlayers = board.getPlayers();
 		
 		start = new JButton("Start");
 		load = new JButton("Load");
@@ -204,7 +211,31 @@ public class StartMenu implements ActionListener, KeyListener{
 		if(selected == quit) {
 			frame.dispose();
 		}
-		
+		if(selected == easy) {
+			gamePlayers[0].setType(1);
+						
+		}
+		if(selected == hard) {
+			gamePlayers[0].setType(2);
+		}
+		if(selected == easy2) {
+			gamePlayers[1].setType(1);
+		}
+		if(selected == hard2) {
+			gamePlayers[1].setType(2);
+		}
+		if(selected == easy3) {
+			gamePlayers[2].setType(1);
+		}
+		if(selected == hard3) {
+			gamePlayers[2].setType(2);
+		}
+		if(selected == easy4) {
+			gamePlayers[3].setType(1);
+		}
+		if(selected == hard4) {
+			gamePlayers[3].setType(2);
+		}
 	}
 
 
@@ -224,16 +255,19 @@ public class StartMenu implements ActionListener, KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
+		JFrame infoMenu = new JFrame("Rules");
 		switch(e.getKeyCode()){
-		case 73 : JFrame infoMenu = new JFrame("Rules");
+		case 73 : 
 		           infoMenu.setSize(500,700);
 				   infoMenu.setVisible(true);
 				   
-		//case 27 : frame.dispose();
+		
 		}
 		if(e.getKeyCode() == 27) {
 			frame.dispose();
 		}
+		
+		
 		
 		
 	}
