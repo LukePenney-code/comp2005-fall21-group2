@@ -19,7 +19,7 @@ public class GameBoard extends JFrame implements ActionListener {
     private Color setupColor; //used to set the color of the piece that starts in each space at the beginning of the game
     private Color defaultButtonColor; //used when button is selected/deselected
     private JButton quit, colorBlindButton, save, load, reserve;
-    private JLabel colorBlindInfo, currentTurn, reserveInfo, colorKey, declareWinner;
+    private JLabel colorBlindInfo, currentTurn, reserveInfo, colorKey, declareWinner, playerInfo;
     private GameSpace moveFrom; //space that has been selected to move from
     private GameSpace moveTo; //space that has been selected to move to
     private boolean moveFromSelected; //true when a space has already been selected to move from, used to determine if a space has been selected to move from or move to
@@ -44,10 +44,10 @@ public class GameBoard extends JFrame implements ActionListener {
     	
     	turn = rand.nextInt(4);
     	players = new Player[4];
-    	players[0] = new Player(1, Color.red);
-    	players[1] = new Player(1, Color.green);
+    	players[0] = new Player(0, Color.red);
+    	players[1] = new Player(0, Color.green);
     	players[2] = new Player(0, Color.cyan);
-    	players[3] = new Player(1, Color.yellow);
+    	players[3] = new Player(0, Color.yellow);
     	currentPlayer = players[turn];
     	
     	topPanel = new JPanel();
@@ -110,6 +110,10 @@ public class GameBoard extends JFrame implements ActionListener {
     	gameSpaces[7][0].add(reserveInfo);
     	colorKey = new JLabel(" ");
     	gameSpaces[7][7].add(colorKey);
+    	playerInfo = new JLabel("<html>Player 1: " + players[0].getType() + " <br/>Player 2: " + players[1].getType() + "<br/>Player 3: " + players[2].getType() + "<br/>Player 4: " + players[3].getType());
+    	playerInfo.setForeground(Color.white);
+    	gameSpaces[0][0].add(playerInfo);
+    	
     	
     	getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(topPanel, BorderLayout.NORTH);
@@ -157,6 +161,10 @@ public class GameBoard extends JFrame implements ActionListener {
 		    	}
 	    	}
     	}
+    }
+    
+    public Player[] getPlayers() {
+    	return players;
     }
     
     public boolean isMovePossible() {
@@ -334,6 +342,10 @@ public class GameBoard extends JFrame implements ActionListener {
 			this.nextTurn();
 			this.setColorBlind();
     	}
+    }
+    
+    public void turnOffVisibilty() {
+    	getContentPane().setVisible(false);
     }
 
 	@Override

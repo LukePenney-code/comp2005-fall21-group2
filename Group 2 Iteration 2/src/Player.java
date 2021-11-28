@@ -30,4 +30,20 @@ public class Player {
 	public int getType() {
 		return this.type;
 	}
+	
+	public void setType(int type) {    //0, 1 , or 2
+		this.type = type;
+	}
+	
+	public boolean isAIPlayer() {
+		if(getType() == 1) {
+			return true;
+		}
+		else if( getType()==2) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }
