@@ -19,7 +19,7 @@ public class GameBoard extends JFrame implements ActionListener {
     private Color setupColor; //used to set the color of the piece that starts in each space at the beginning of the game
     private Color defaultButtonColor; //used when button is selected/deselected
     private JButton quit, colorBlindButton, save, load, reserve;
-    private JLabel colorBlindInfo, currentTurn, reserveInfo, colorKey, declareWinner;
+    private JLabel colorBlindInfo, currentTurn, reserveInfo, colorKey, declareWinner, playerInfo;
     private GameSpace moveFrom; //space that has been selected to move from
     private GameSpace moveTo; //space that has been selected to move to
     private boolean moveFromSelected; //true when a space has already been selected to move from, used to determine if a space has been selected to move from or move to
@@ -51,18 +51,13 @@ public class GameBoard extends JFrame implements ActionListener {
     	
     	turn = rand.nextInt(4);
     	players = new Player[4];
-<<<<<<< HEAD
     	
     	players[0] = new Player(player1num, Color.red);
     	players[1] = new Player(player2num, Color.green);
     	players[2] = new Player(player3num, Color.cyan);
     	players[3] = new Player(player4num, Color.yellow);
-=======
-    	players[0] = new Player(0, Color.red);
-    	players[1] = new Player(1, Color.green);
-    	players[2] = new Player(0, Color.cyan);
-    	players[3] = new Player(2, Color.yellow);
->>>>>>> 34351b6f094341cd4311def689fa2fa2a719a0f1
+
+    
     	currentPlayer = players[turn];
     	
     	
@@ -126,14 +121,13 @@ public class GameBoard extends JFrame implements ActionListener {
     	gameSpaces[7][0].add(reserveInfo);
     	colorKey = new JLabel(" ");
     	gameSpaces[7][7].add(colorKey);
-<<<<<<< HEAD
+
     	playerInfo = new JLabel("<html>Player 1 (RED): " + players[0].getType() + " <br/>Player 2 (GREEN): " + players[1].getType() + "<br/>Player 3 (BLUE): " + players[2].getType() + "<br/>Player 4 (YELLOW): " + players[3].getType()
     			+ "<br/>Human = 0 <br/> Easy = 1 <br/> Hard = 2");
     	playerInfo.setForeground(Color.white);
     	gameSpaces[0][0].add(playerInfo);
     	
-=======
->>>>>>> 34351b6f094341cd4311def689fa2fa2a719a0f1
+
     	
     	getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(topPanel, BorderLayout.NORTH);
@@ -405,11 +399,6 @@ public class GameBoard extends JFrame implements ActionListener {
 			this.setColorBlind();
     	}
     }
-<<<<<<< HEAD
-    
-    
-=======
->>>>>>> 34351b6f094341cd4311def689fa2fa2a719a0f1
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
