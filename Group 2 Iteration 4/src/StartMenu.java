@@ -6,13 +6,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.Serializable;
 
-public class StartMenu implements ActionListener, KeyListener{
+public class StartMenu implements ActionListener, KeyListener, Serializable{
 	private JLabel title,prompt, info;
 	private JFrame frame;
 	private JButton start,load,quit, easy, hard, easy2, hard2, easy3, hard3, easy4, hard4, human1,human2,human3,human4;
 	private ImageIcon logo;
 	private int player_one_type, player_two_type, player_three_type, player_four_type;
+	private GameBoard game;
 	
 	
 	public StartMenu() {
@@ -71,6 +73,7 @@ public class StartMenu implements ActionListener, KeyListener{
 		quit.setFont(new Font("Bahaus 93", Font.PLAIN,20));
 		quit.addActionListener(this);
 		start.setBounds(700, 550, 110, 100);
+		load.addActionListener(this);
 		//start.setIcon(startIcon);
 		frame.getContentPane().add(start);
 		start.setBackground(Color.RED);
@@ -218,6 +221,10 @@ public class StartMenu implements ActionListener, KeyListener{
 		if(selected == start) {
 			new GameBoard(player_one_type, player_two_type, player_three_type, player_four_type);
 			frame.dispose();
+		}
+		if(selected==load){
+			new GameBoard(player_one_type, player_two_type, player_three_type, player_four_type).load();
+
 		}
 		
 		if(selected == quit) {

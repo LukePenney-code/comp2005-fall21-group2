@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MoveHandler {
+public class MoveHandler implements Serializable {
 	
 	private ArrayList<GamePiece> transferStack;
 	

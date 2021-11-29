@@ -1,6 +1,7 @@
 import java.awt.Color;
+import java.io.Serializable;
 
-public class Player {
+public class Player implements Serializable {
 	
 	private int type; // 0 for human, 1 for easy, 2 for hard
 	private Color color;

@@ -1,6 +1,8 @@
 import java.awt.*;
+import java.io.Serializable;
+
 import javax.swing.*;
-public class GamePiece{
+public class GamePiece implements Serializable{
 	
 	private Color color;
 	/**

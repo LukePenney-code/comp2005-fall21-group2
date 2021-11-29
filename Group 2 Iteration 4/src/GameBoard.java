@@ -1,12 +1,15 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.Serializable;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.util.Random;
 import java.lang.Math.*;
 import java.util.ArrayList;
-public class GameBoard extends JFrame implements ActionListener {
+public class GameBoard extends JFrame implements ActionListener,Serializable {
 	
     private JPanel topPanel;
     private JPanel leftPanel;
@@ -35,6 +38,7 @@ public class GameBoard extends JFrame implements ActionListener {
     private String secondLastTurn;
     private String lastTurn;
     private boolean lastMoveWasReserve;
+	private GameBoard game;
     
     
     //true when a space has already been selected to move from, used to determine if a space has been selected to move from or move to
@@ -79,9 +83,9 @@ public class GameBoard extends JFrame implements ActionListener {
     	colorBlindButton.addActionListener(this);
     	quit.addActionListener(this);
     	save = new JButton("Save");
-    	save.addActionListener(e -> { save();} );
+    	save.addActionListener(this);
     	load = new JButton("Load");
-    	load.addActionListener(e -> { load();});
+    	load.addActionListener(this);
     	reserve = new JButton("Reserve");
     	defaultButtonColor = reserve.getBackground();
     	reserve.addActionListener(this);
@@ -256,20 +260,35 @@ public class GameBoard extends JFrame implements ActionListener {
     	return null;
     }
     public void save() {
-		/*
-		 * JFrame popUp = new JFrame(); JTextBox saveField = new
-		 * JTextBox("Enter save name"); popUp.add(saveField); String saveName =
-		 * saveField.getText(); popUp.setVisible(true);
-		 */
-    	SaveLoadGame data = new SaveLoadGame();
+		
+    	
     	try {
-    		ResourceManager.save(data, "1.save");
+    		ResourceManager.save("Domination.txt",this);
+			
     		
-    	} catch(Exception e1) {
-    		System.out.println("Could not save" + e1.getMessage());
-    	}
+    	} catch(IOException e){
+			e.printStackTrace();
+		}
+		JOptionPane.showMessageDialog(gameBoard,"Game saved successfuly as Domination, thank you for playing!");
+		System.exit(0);
+		
+
+		
     }
     public void load() {
+		try{
+			game = (GameBoard) ResourceManager.load("Domination.txt");
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+		catch(ClassNotFoundException e){
+			e.printStackTrace();
+
+			
+		}
+		JOptionPane.showMessageDialog(gameBoard,"Welcome back!");
+
     	
     	
     }
@@ -454,8 +473,16 @@ public class GameBoard extends JFrame implements ActionListener {
 				System.exit(0);
 			}
 			if(response.equals("yes")) {
-				save();
+				this.save();
 			}
+		}
+		if(selected.equals(save)){
+			this.save();
+
+		}
+		if(selected.equals(load)){
+			this.load();
+
 		}
 		if (selected.equals(colorBlindButton)) {
 			if (colorBlindOn) {

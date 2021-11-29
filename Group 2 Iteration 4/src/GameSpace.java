@@ -1,8 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GameSpace extends JButton{
+public class GameSpace extends JButton implements Serializable{
 	private ArrayList<GamePiece> stack;
 	private int xcoord, ycoord, i;
 	private JPanel[] panels;
