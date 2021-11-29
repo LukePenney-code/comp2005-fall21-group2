@@ -30,8 +30,11 @@ public class GameBoard extends JFrame implements ActionListener {
     private int noMoveCount; //Counts how many players in a row cannot move. If 3 players cannot move the 4th player wins.
     private boolean gameWon; //stops moves from being made if the game has ended
     private MoveHandler moveHandler;
+	private int player1num, player2num, player3num, player4num;
+	
     
-    public GameBoard(){
+    
+    public GameBoard(int player1num, int player2num, int player3num, int player4num){
     	
     	rows = 8;
     	columns = 8;
@@ -41,14 +44,20 @@ public class GameBoard extends JFrame implements ActionListener {
     	noMoveCount = 0;
     	gameWon = false;
     	moveHandler = new MoveHandler();
+    	this.player1num = player1num;
+    	this.player2num = player2num;
+    	this.player3num = player3num;
+    	this.player4num = player4num;
     	
     	turn = rand.nextInt(4);
     	players = new Player[4];
-    	players[0] = new Player(0, Color.red);
-    	players[1] = new Player(0, Color.green);
-    	players[2] = new Player(0, Color.cyan);
-    	players[3] = new Player(0, Color.yellow);
+    	
+    	players[0] = new Player(player1num, Color.red);
+    	players[1] = new Player(player2num, Color.green);
+    	players[2] = new Player(player3num, Color.cyan);
+    	players[3] = new Player(player4num, Color.yellow);
     	currentPlayer = players[turn];
+    	
     	
     	topPanel = new JPanel();
     	//bottomPanel = new JPanel();
@@ -110,7 +119,8 @@ public class GameBoard extends JFrame implements ActionListener {
     	gameSpaces[7][0].add(reserveInfo);
     	colorKey = new JLabel(" ");
     	gameSpaces[7][7].add(colorKey);
-    	playerInfo = new JLabel("<html>Player 1: " + players[0].getType() + " <br/>Player 2: " + players[1].getType() + "<br/>Player 3: " + players[2].getType() + "<br/>Player 4: " + players[3].getType());
+    	playerInfo = new JLabel("<html>Player 1 (RED): " + players[0].getType() + " <br/>Player 2 (GREEN): " + players[1].getType() + "<br/>Player 3 (BLUE): " + players[2].getType() + "<br/>Player 4 (YELLOW): " + players[3].getType()
+    			+ "<br/>Human = 0 <br/> Easy = 1 <br/> Hard = 2");
     	playerInfo.setForeground(Color.white);
     	gameSpaces[0][0].add(playerInfo);
     	
@@ -344,9 +354,7 @@ public class GameBoard extends JFrame implements ActionListener {
     	}
     }
     
-    public void turnOffVisibilty() {
-    	getContentPane().setVisible(false);
-    }
+    
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

@@ -6,7 +6,7 @@ public class Player {
 	private Color color;
 	private int reserve;
 	
-	public Player(int type, Color color) {
+	public Player(int type , Color color) {
 		this.color = color;
 		this.type = type;
 	}
@@ -31,8 +31,8 @@ public class Player {
 		return this.type;
 	}
 	
-	public void setType(int type) {    //0, 1 , or 2
-		this.type = type;
+	public void setType(int new_type) {    //0, 1 , or 2
+		this.type = new_type;
 	}
 	
 	public boolean isAIPlayer() {
