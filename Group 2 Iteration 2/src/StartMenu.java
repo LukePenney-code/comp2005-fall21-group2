@@ -10,10 +10,9 @@ import java.awt.event.KeyListener;
 public class StartMenu implements ActionListener, KeyListener{
 	private JLabel title,prompt, info;
 	private JFrame frame;
-	private JButton start,load,quit, easy, hard, easy2, hard2, easy3, hard3, easy4, hard4;
+	private JButton start,load,quit, easy, hard, easy2, hard2, easy3, hard3, easy4, hard4, human1,human2,human3,human4;
 	private ImageIcon logo;
-	private Player[] gamePlayers;
-	private GameBoard board;
+	private int player_one_type, player_two_type, player_three_type, player_four_type;
 	
 	
 	public StartMenu() {
@@ -27,10 +26,10 @@ public class StartMenu implements ActionListener, KeyListener{
 		logo = new ImageIcon("workingLogo.png");
 		setUpLabel(frame,title,prompt,info,logo);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		board = new GameBoard();
-		//board.turnOffVisibilty();
-		board.dispose();
-		//gamePlayers = board.getPlayers();
+		
+		
+		
+		
 		
 		start = new JButton("Start");
 		load = new JButton("Load");
@@ -44,12 +43,14 @@ public class StartMenu implements ActionListener, KeyListener{
 		hard3 = new JButton("Hard");
 		easy4 = new JButton("Easy");
 		hard4 = new JButton("Hard");
+		human1 = new JButton("Human");
+		human2 = new JButton("Human");
+		human3 = new JButton("Human");
+		human4 = new JButton("Human");
 		
 		difficultySetting(frame, easy, hard, easy2, hard2, easy3, hard3, easy4, hard4);
 		groupMemberNames();
 		frame.addKeyListener(this);
-		
-		
 		
 		
 		
@@ -84,11 +85,12 @@ public class StartMenu implements ActionListener, KeyListener{
 	private void difficultySetting(JFrame frame, JButton easy, JButton hard, JButton easy2, JButton hard2, JButton easy3, JButton hard3, JButton easy4, JButton hard4) {
 		
 		//Player 1 setup
-		JButton human = new JButton("Human");
-		human.setBounds(49, 760, 77, 60);
-		frame.getContentPane().add(human);
-		human.setBackground(Color.red);
-		human.setFont(new Font("Bahaus 93", Font.BOLD,12));
+		
+		human1.setBounds(49, 760, 77, 60);
+		frame.getContentPane().add(human1);
+		human1.setBackground(Color.red);
+		human1.setFont(new Font("Bahaus 93", Font.BOLD,12));
+		human1.addActionListener(this);
 		
 		easy.setBounds(24, 700, 60, 60);
 		frame.getContentPane().add(easy);
@@ -98,45 +100,53 @@ public class StartMenu implements ActionListener, KeyListener{
 		hard.setBackground(Color.red);
 		easy.setFont(new Font("Bahaus 93", Font.BOLD,11));
 		hard.setFont(new Font("Bahaus 93", Font.BOLD,11));
+		easy.addActionListener(this);
+		hard.addActionListener(this);
 		
 		//Player 2 setup
-		JButton human2 = new JButton("Human");
+		
 		human2.setBounds(200, 760, 77, 60);
 		frame.getContentPane().add(human2);
-		human2.setBackground(Color.cyan);
+		human2.setBackground(Color.green);
 		human2.setFont(new Font("Bahaus 93", Font.BOLD,12));
+		human2.addActionListener(this);
 		
 		easy2.setBounds(180, 700, 60, 60);
 		frame.getContentPane().add(easy2);
 		hard2.setBounds(240, 700, 60, 60);
 		frame.getContentPane().add(hard2);
-		easy2.setBackground(Color.cyan);
-		hard2.setBackground(Color.cyan);
+		easy2.setBackground(Color.green);
+		hard2.setBackground(Color.green);
 		easy2.setFont(new Font("Bahaus 93", Font.BOLD,11));
 		hard2.setFont(new Font("Bahaus 93", Font.BOLD,11));
+		easy2.addActionListener(this);
+		hard2.addActionListener(this);
 		
 		//Player 3 setup
-		JButton human3 = new JButton("Human");
+		
 		human3.setBounds(360, 760, 77, 60);
 		frame.getContentPane().add(human3);
-		human3.setBackground(Color.green);
+		human3.setBackground(Color.cyan);
 		human3.setFont(new Font("Bahaus 93", Font.BOLD,12));
+		human3.addActionListener(this);
 		
 		easy3.setBounds(340, 700, 60, 60);
 		frame.getContentPane().add(easy3);
 		hard3.setBounds(400, 700, 60, 60);
 		frame.getContentPane().add(hard3);
-		easy3.setBackground(Color.green);
-		hard3.setBackground(Color.green);
+		easy3.setBackground(Color.cyan);
+		hard3.setBackground(Color.cyan);
 		easy3.setFont(new Font("Bahaus 93", Font.BOLD,11));
 		hard3.setFont(new Font("Bahaus 93", Font.BOLD,11));
-		
+		easy3.addActionListener(this);
+		hard3.addActionListener(this);
 		//Player 4 setup
-		JButton human4 = new JButton("Human");
+		;
 		human4.setBounds(510, 760, 77, 60);
 		frame.getContentPane().add(human4);
 		human4.setBackground(new Color(220,220,0));
 		human4.setFont(new Font("Bahaus 93", Font.BOLD,12));
+		human4.addActionListener(this);
 		
 		easy4.setBounds(490, 700, 60, 60);
 		frame.getContentPane().add(easy4);
@@ -146,6 +156,8 @@ public class StartMenu implements ActionListener, KeyListener{
 		hard4.setBackground(new Color(220,220,0));
 		easy4.setFont(new Font("Bahaus 93", Font.BOLD,11));
 		hard4.setFont(new Font("Bahaus 93", Font.BOLD,11));
+		easy4.addActionListener(this);
+		hard4.addActionListener(this);
 		
 	}
 
@@ -204,7 +216,7 @@ public class StartMenu implements ActionListener, KeyListener{
 		// TODO Auto-generated method stub
 		Object selected = e.getSource();
 		if(selected == start) {
-			new GameBoard();
+			new GameBoard(player_one_type, player_two_type, player_three_type, player_four_type);
 			frame.dispose();
 		}
 		
@@ -212,29 +224,48 @@ public class StartMenu implements ActionListener, KeyListener{
 			frame.dispose();
 		}
 		if(selected == easy) {
-			gamePlayers[0].setType(1);
+			this.player_one_type = 1;
 						
 		}
 		if(selected == hard) {
-			gamePlayers[0].setType(2);
+			this.player_one_type = 2;
+			//players[0].setType(2);
 		}
 		if(selected == easy2) {
-			gamePlayers[1].setType(1);
+			this.player_two_type = 1;
+			//players[1].setType(1);
 		}
 		if(selected == hard2) {
-			gamePlayers[1].setType(2);
+			this.player_two_type = 2;
+			//players[1].setType(2);
 		}
 		if(selected == easy3) {
-			gamePlayers[2].setType(1);
+			this.player_three_type = 1;
+			//players[2].setType(1);
 		}
 		if(selected == hard3) {
-			gamePlayers[2].setType(2);
+			this.player_three_type = 2;
+			//players[2].setType(2);
 		}
 		if(selected == easy4) {
-			gamePlayers[3].setType(1);
+			this.player_four_type = 1;
+			//players[3].setType(1);
 		}
 		if(selected == hard4) {
-			gamePlayers[3].setType(2);
+			this.player_four_type = 2;
+			//players[3].setType(2);
+		}
+		if(selected == human1) {
+			this.player_one_type = 0;
+		}
+		if(selected == human2) {
+			this.player_two_type = 0;
+		}
+		if(selected == human3) {
+			this.player_three_type = 0;
+		}
+		if(selected == human4) {
+			this.player_four_type = 0;
 		}
 	}
 
