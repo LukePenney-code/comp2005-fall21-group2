@@ -19,7 +19,11 @@ public class GameBoard extends JFrame implements ActionListener {
     private Color setupColor; //used to set the color of the piece that starts in each space at the beginning of the game
     private Color defaultButtonColor; //used when button is selected/deselected
     private JButton quit, colorBlindButton, save, load, reserve;
+<<<<<<< HEAD
     private JLabel colorBlindInfo, currentTurn, reserveInfo, colorKey, declareWinner, playerInfo;
+=======
+    private JLabel colorBlindInfo, currentTurn, reserveInfo, colorKey, declareWinner, turnTracker, playerInfo;
+>>>>>>> 6e6b93d900e0f02a7344e9109d748082c515496b
     private GameSpace moveFrom; //space that has been selected to move from
     private GameSpace moveTo; //space that has been selected to move to
     private boolean moveFromSelected; //true when a space has already been selected to move from, used to determine if a space has been selected to move from or move to
@@ -31,6 +35,10 @@ public class GameBoard extends JFrame implements ActionListener {
     private boolean gameWon; //stops moves from being made if the game has ended
     private MoveHandler moveHandler;
 	private int player1num, player2num, player3num, player4num;
+	private String thirdLastTurn;
+    private String secondLastTurn;
+    private String lastTurn;
+    private boolean lastMoveWasReserve;
 	
     
     
@@ -48,16 +56,26 @@ public class GameBoard extends JFrame implements ActionListener {
     	this.player2num = player2num;
     	this.player3num = player3num;
     	this.player4num = player4num;
+    	thirdLastTurn = " ";
+    	secondLastTurn = " ";
+    	lastTurn = " ";
+    	lastMoveWasReserve = false;
     	
     	turn = rand.nextInt(4);
     	players = new Player[4];
+<<<<<<< HEAD
     	
+=======
+>>>>>>> 6e6b93d900e0f02a7344e9109d748082c515496b
     	players[0] = new Player(player1num, Color.red);
     	players[1] = new Player(player2num, Color.green);
     	players[2] = new Player(player3num, Color.cyan);
     	players[3] = new Player(player4num, Color.yellow);
+<<<<<<< HEAD
 
     
+=======
+>>>>>>> 6e6b93d900e0f02a7344e9109d748082c515496b
     	currentPlayer = players[turn];
     	
     	
@@ -82,7 +100,7 @@ public class GameBoard extends JFrame implements ActionListener {
     	defaultButtonColor = reserve.getBackground();
     	reserve.addActionListener(this);
     	
-    	currentTurn = new JLabel(this.getTurnColorString() + "'s turn");
+    	currentTurn = new JLabel(this.getTurnColorString(turn) + "'s turn");
     	topPanel.add(quit);
     	topPanel.add(colorBlindButton);
     	topPanel.add(currentTurn);
@@ -94,7 +112,6 @@ public class GameBoard extends JFrame implements ActionListener {
     	
     	topPanel.setLayout(new FlowLayout());
     	topPanel.setSize(200,200);
-    	//bottomPanel.setLayout(new FlowLayout());
     	
     	gameBoard.setLayout(new GridLayout(rows, columns));
     	gameBoard.setSize(800,800);
@@ -121,6 +138,7 @@ public class GameBoard extends JFrame implements ActionListener {
     	gameSpaces[7][0].add(reserveInfo);
     	colorKey = new JLabel(" ");
     	gameSpaces[7][7].add(colorKey);
+<<<<<<< HEAD
 
     	playerInfo = new JLabel("<html>Player 1 (RED): " + players[0].getType() + " <br/>Player 2 (GREEN): " + players[1].getType() + "<br/>Player 3 (BLUE): " + players[2].getType() + "<br/>Player 4 (YELLOW): " + players[3].getType()
     			+ "<br/>Human = 0 <br/> Easy = 1 <br/> Hard = 2");
@@ -128,10 +146,18 @@ public class GameBoard extends JFrame implements ActionListener {
     	gameSpaces[0][0].add(playerInfo);
     	
 
+=======
+    	playerInfo = new JLabel("<html>Player 1 (Red): " + players[0].getTypeString() + " <br/>Player 2 (Green): " + players[1].getTypeString() +
+    			"<br/>Player 3 (Blue): " + players[2].getTypeString() + "<br/>Player 4 (Yellow): " + players[3].getTypeString());
+    	playerInfo.setForeground(Color.white);
+    	gameSpaces[0][0].add(playerInfo);
+    	turnTracker = new JLabel("Last 3 moves:");
+    	turnTracker.setForeground(Color.white);
+    	gameSpaces[0][7].add(turnTracker);
+>>>>>>> 6e6b93d900e0f02a7344e9109d748082c515496b
     	
     	getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(topPanel, BorderLayout.NORTH);
-		//getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 		getContentPane().add(rightPanel, BorderLayout.EAST);
 		getContentPane().add(leftPanel, BorderLayout.WEST);
 		getContentPane().add(gameBoard, BorderLayout.CENTER);
@@ -152,6 +178,7 @@ public class GameBoard extends JFrame implements ActionListener {
     }
     
     public void nextTurn() {
+    	int previousTurn = turn;
     	if (turn == 3) {
     		turn = 0;
     	}else {
@@ -159,7 +186,7 @@ public class GameBoard extends JFrame implements ActionListener {
     	}
     	currentPlayer = players[turn];
     	if (noMoveCount == 3) {
-    		declareWinner.setText(this.getTurnColorString() + " wins!");
+    		declareWinner.setText(this.getTurnColorString(turn) + " wins!");
         	currentTurn.setText("Click New Game to play again");
         	gameWon = true;
     	}else {
@@ -168,12 +195,27 @@ public class GameBoard extends JFrame implements ActionListener {
 	    		this.nextTurn();
 	    	}else if (!(gameWon)) {
 	    		noMoveCount = 0;
-		    	currentTurn.setText(this.getTurnColorString() + "'s turn");
+		    	currentTurn.setText(this.getTurnColorString(turn) + "'s turn");
+		    	this.updateTurnTracker(previousTurn);
 		    	if (!(currentPlayer.getType() == 0)) {
 		    		this.moveAI();
 		    	}
 	    	}
     	}
+    }
+    
+    public void updateTurnTracker(int previousTurn) {
+    	String from = "";
+    	if (lastMoveWasReserve) {
+    		from = "reserve";
+    	}else {
+    		from = "(" + moveFrom.getXcoord() + ", " + (7 - moveFrom.getYcoord()) + ")";
+    	}
+    	thirdLastTurn = secondLastTurn;
+    	secondLastTurn = lastTurn;
+    	lastTurn = (this.getTurnColorString(previousTurn) + ": " + from + " to (" + moveTo.getXcoord() + ", " + (7 - moveTo.getYcoord()) + ")");
+    	turnTracker.setText("<html>Last 3 moves:<br/>" + thirdLastTurn + "<br/>" + secondLastTurn + "<br/>" + lastTurn + " (new)<br/>Note: this square is (0, 0)<html>");
+    	turnTracker.setForeground(Color.white);
     }
     
     public boolean isMovePossible() {
@@ -197,18 +239,18 @@ public class GameBoard extends JFrame implements ActionListener {
     	return currentPlayer.getColor();
     }
     
-    public String getTurnColorString() {
+    public String getTurnColorString(int turnNumber) {
     	// returns color of player whose turn it currently is
-    	if (turn == 0) {
+    	if (turnNumber == 0) {
     		return "red";
     	}
-    	if (turn == 1) {
+    	if (turnNumber == 1) {
     		return "green";
     	}
-    	if (turn == 2) {
+    	if (turnNumber == 2) {
     		return "blue";
     	}
-    	if (turn == 3) {
+    	if (turnNumber == 3) {
     		return "yellow";
     	}
     	return null;
@@ -290,6 +332,7 @@ public class GameBoard extends JFrame implements ActionListener {
     	}
     	if (chooseMoveFrom == fromX.size()) {
     		//make reserve move
+    		lastMoveWasReserve = true;
     		if (currentPlayer.getType() == 1) {
     			//easy version
 	    		chooseMoveTo = rand.nextInt(52); //There are 52 white spaces and 12 black. This chooses a white space.
@@ -333,6 +376,7 @@ public class GameBoard extends JFrame implements ActionListener {
     		}
     	}else {
     		//make normal move
+    		lastMoveWasReserve = false;
     		moveFrom = gameSpaces[fromX.get(chooseMoveFrom)][fromY.get(chooseMoveFrom)];
     		int x = moveFrom.getXcoord();
     		int y = moveFrom.getYcoord();
@@ -445,6 +489,7 @@ public class GameBoard extends JFrame implements ActionListener {
 					if (!(moveTo.getColor().equals(Color.black))) {
 						if (reserve.getBackground().equals(Color.gray)) {
 							//make reserve move
+							lastMoveWasReserve = true;
 							reserve.setBackground(defaultButtonColor);
 							moveFromSelected = false;
 							moveHandler.makeReserveMove(moveTo, currentPlayer);
@@ -457,6 +502,7 @@ public class GameBoard extends JFrame implements ActionListener {
 							moveFrom.setBackground(Color.white);
 						}else {
 							//space has been selected to move to
+							lastMoveWasReserve = false;
 							int xDist = Math.abs(moveTo.getXcoord() - moveFrom.getXcoord());
 							int yDist = Math.abs(moveTo.getYcoord() - moveFrom.getYcoord());
 							int distance = xDist + yDist;
