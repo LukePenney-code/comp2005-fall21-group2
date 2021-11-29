@@ -140,7 +140,7 @@ public class GameBoard extends JFrame implements ActionListener {
     	gameSpaces[0][0].add(playerInfo);
 
 
-    	turnTracker = new JLabel("Last 3 moves:");
+    	turnTracker = new JLabel("<HTML>Last 3 moves:<br/>(newest at bottom)<HTML>");
     	turnTracker.setForeground(Color.white);
     	gameSpaces[0][7].add(turnTracker);
 
@@ -203,7 +203,7 @@ public class GameBoard extends JFrame implements ActionListener {
     	thirdLastTurn = secondLastTurn;
     	secondLastTurn = lastTurn;
     	lastTurn = (this.getTurnColorString(previousTurn) + ": " + from + " to (" + moveTo.getXcoord() + ", " + (7 - moveTo.getYcoord()) + ")");
-    	turnTracker.setText("<html>Last 3 moves:<br/>" + thirdLastTurn + "<br/>" + secondLastTurn + "<br/>" + lastTurn + " (new)<br/>Note: this square is (0, 0)<html>");
+    	turnTracker.setText("<html>Last 3 moves:<br/>" + thirdLastTurn + "<br/>" + secondLastTurn + "<br/>" + lastTurn + "<br/>Note: this square is (0, 0)<html>");
     	turnTracker.setForeground(Color.white);
     }
     
@@ -372,9 +372,10 @@ public class GameBoard extends JFrame implements ActionListener {
     		boolean valid = false;
     		int distance = 0;
     		int tryIdealMove = 0;
-    		//Hard AI will try to pick an ideal move to make by checking random moves. If it fails to find an ideal move 100 times it will make a random move.
+    		int idealAttemptLimit = 2;
+    		//Hard AI will try to pick an ideal move to make by checking random moves. If it fails to find an ideal move 2 times it will make a random move.
     		if (currentPlayer.getType() == 1) {
-    			tryIdealMove = 100;
+    			tryIdealMove = idealAttemptLimit; //Easy AI does not attempt ideal moves.
     		}
     		while (!(valid)) {
     			distance = (rand.nextInt(moveFrom.getStackSize()) + 1);
@@ -382,8 +383,8 @@ public class GameBoard extends JFrame implements ActionListener {
     			if (direction == 0) {
     				if ((x + distance) < 8) {
 	    				if (!(gameSpaces[x + distance][y].getColor().equals(Color.black))) {
-	    					if ((gameSpaces[x + distance][y].getStackSize() > 0) || (tryIdealMove >= 100)) {
-	    						if (!((tryIdealMove < 100) && (gameSpaces[x + distance][y].topPiece().getColor().equals(currentPlayer.getColor())))) {
+	    					if ((gameSpaces[x + distance][y].getStackSize() > 0) || (tryIdealMove >= idealAttemptLimit)) {
+	    						if (!((tryIdealMove < idealAttemptLimit) && (gameSpaces[x + distance][y].topPiece().getColor().equals(currentPlayer.getColor())))) {
 		    					valid = true;
 		    					moveTo = gameSpaces[x + distance][y];
 	    						}
@@ -393,8 +394,8 @@ public class GameBoard extends JFrame implements ActionListener {
     			}else if (direction == 1) {
     				if ((x - distance) >= 0) {
 	    				if (!(gameSpaces[x - distance][y].getColor().equals(Color.black))) {
-	    					if ((gameSpaces[x - distance][y].getStackSize() > 0) || (tryIdealMove >= 100)) {
-	    						if (!((tryIdealMove < 100) && (gameSpaces[x - distance][y].topPiece().getColor().equals(currentPlayer.getColor())))) {
+	    					if ((gameSpaces[x - distance][y].getStackSize() > 0) || (tryIdealMove >= idealAttemptLimit)) {
+	    						if (!((tryIdealMove < idealAttemptLimit) && (gameSpaces[x - distance][y].topPiece().getColor().equals(currentPlayer.getColor())))) {
 		    					valid = true;
 		    					moveTo = gameSpaces[x - distance][y];
 	    						}
@@ -404,8 +405,8 @@ public class GameBoard extends JFrame implements ActionListener {
     			}else if (direction == 2) {
     				if ((y + distance) < 8) {
 	    				if (!(gameSpaces[x][y + distance].getColor().equals(Color.black))) {
-	    					if ((gameSpaces[x][y + distance].getStackSize() > 0) || (tryIdealMove >= 100)) {
-	    						if (!((tryIdealMove < 100) && (gameSpaces[x][y + distance].topPiece().getColor().equals(currentPlayer.getColor())))) {
+	    					if ((gameSpaces[x][y + distance].getStackSize() > 0) || (tryIdealMove >= idealAttemptLimit)) {
+	    						if (!((tryIdealMove < idealAttemptLimit) && (gameSpaces[x][y + distance].topPiece().getColor().equals(currentPlayer.getColor())))) {
 		    					valid = true;
 		    					moveTo = gameSpaces[x][y + distance];
 	    						}
@@ -415,8 +416,8 @@ public class GameBoard extends JFrame implements ActionListener {
     			}else {
     				if ((y - distance) >= 0) {
 	    				if (!(gameSpaces[x][y - distance].getColor().equals(Color.black))) {
-	    					if ((gameSpaces[x][y - distance].getStackSize() > 0) || (tryIdealMove >= 100)) {
-	    						if (!((tryIdealMove < 100) && (gameSpaces[x][y - distance].topPiece().getColor().equals(currentPlayer.getColor())))) {
+	    					if ((gameSpaces[x][y - distance].getStackSize() > 0) || (tryIdealMove >= idealAttemptLimit)) {
+	    						if (!((tryIdealMove < idealAttemptLimit) && (gameSpaces[x][y - distance].topPiece().getColor().equals(currentPlayer.getColor())))) {
 		    					valid = true;
 		    					moveTo = gameSpaces[x][y - distance];
 	    						}
