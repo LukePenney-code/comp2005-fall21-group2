@@ -28,9 +28,9 @@ public class StartMenu implements ActionListener, KeyListener{
 		setUpLabel(frame,title,prompt,info,logo);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		board = new GameBoard();
-		board.turnOffVisibilty();
+		//board.turnOffVisibilty();
 		board.dispose();
-		gamePlayers = board.getPlayers();
+		//gamePlayers = board.getPlayers();
 		
 		start = new JButton("Start");
 		load = new JButton("Load");
