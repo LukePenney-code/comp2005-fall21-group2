@@ -129,29 +129,20 @@ public class GameBoard extends JFrame implements ActionListener {
     	reserveInfo.setForeground(Color.white);
     		
 
-
     	gameSpaces[7][0].add(reserveInfo);
     	colorKey = new JLabel(" ");
     	gameSpaces[7][7].add(colorKey);
 
 
-
-    	playerInfo = new JLabel("<html>Player 1 (RED): " + players[0].getType() + " <br/>Player 2 (GREEN): " + players[1].getType() + "<br/>Player 3 (BLUE): " + players[2].getType() + "<br/>Player 4 (YELLOW): " + players[3].getType()
-    			+ "<br/>Human = 0 <br/> Easy = 1 <br/> Hard = 2");
+    	playerInfo = new JLabel("<html>Player 1 (Red): " + players[0].getTypeString() + " <br/>Player 2 (Green): " + players[1].getTypeString() +
+    			"<br/>Player 3 (Blue): " + players[2].getTypeString() + "<br/>Player 4 (Yellow): " + players[3].getTypeString());
     	playerInfo.setForeground(Color.white);
     	gameSpaces[0][0].add(playerInfo);
 
 
-
-//    	playerInfo = new JLabel("<html>Player 1 (Red): " + players[0].getTypeString() + " <br/>Player 2 (Green): " + players[1].getTypeString() +
-//    			"<br/>Player 3 (Blue): " + players[2].getTypeString() + "<br/>Player 4 (Yellow): " + players[3].getTypeString());
-//    	playerInfo.setForeground(Color.white);
-//    	gameSpaces[0][0].add(playerInfo);
-
     	turnTracker = new JLabel("Last 3 moves:");
     	turnTracker.setForeground(Color.white);
     	gameSpaces[0][7].add(turnTracker);
-
 
 
     	getContentPane().setLayout(new BorderLayout());
