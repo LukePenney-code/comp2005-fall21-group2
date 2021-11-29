@@ -31,8 +31,18 @@ public class Player {
 		return this.type;
 	}
 	
-	public void setType(int new_type) {    //0, 1 , or 2
+	public void setType(int new_type) {    //0, 1, or 2
 		this.type = new_type;
+	}
+	
+	public String getTypeString() {
+		if (this.type == 0) {
+			return "Human";
+		}else if (this.type == 1) {
+			return "Easy AI";
+		}else {
+			return "Hard AI";
+		}
 	}
 	
 	public boolean isAIPlayer() {
