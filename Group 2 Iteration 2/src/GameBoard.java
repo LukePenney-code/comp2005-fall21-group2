@@ -19,11 +19,7 @@ public class GameBoard extends JFrame implements ActionListener {
     private Color setupColor; //used to set the color of the piece that starts in each space at the beginning of the game
     private Color defaultButtonColor; //used when button is selected/deselected
     private JButton quit, colorBlindButton, save, load, reserve;
-<<<<<<< HEAD
-    private JLabel colorBlindInfo, currentTurn, reserveInfo, colorKey, declareWinner, playerInfo;
-=======
-    private JLabel colorBlindInfo, currentTurn, reserveInfo, colorKey, declareWinner, turnTracker, playerInfo;
->>>>>>> 6e6b93d900e0f02a7344e9109d748082c515496b
+    private JLabel colorBlindInfo, currentTurn, reserveInfo, colorKey, declareWinner, playerInfo, turnTracker;
     private GameSpace moveFrom; //space that has been selected to move from
     private GameSpace moveTo; //space that has been selected to move to
     private boolean moveFromSelected; //true when a space has already been selected to move from, used to determine if a space has been selected to move from or move to
@@ -63,19 +59,11 @@ public class GameBoard extends JFrame implements ActionListener {
     	
     	turn = rand.nextInt(4);
     	players = new Player[4];
-<<<<<<< HEAD
-    	
-=======
->>>>>>> 6e6b93d900e0f02a7344e9109d748082c515496b
     	players[0] = new Player(player1num, Color.red);
     	players[1] = new Player(player2num, Color.green);
     	players[2] = new Player(player3num, Color.cyan);
     	players[3] = new Player(player4num, Color.yellow);
-<<<<<<< HEAD
 
-    
-=======
->>>>>>> 6e6b93d900e0f02a7344e9109d748082c515496b
     	currentPlayer = players[turn];
     	
     	
@@ -138,7 +126,7 @@ public class GameBoard extends JFrame implements ActionListener {
     	gameSpaces[7][0].add(reserveInfo);
     	colorKey = new JLabel(" ");
     	gameSpaces[7][7].add(colorKey);
-<<<<<<< HEAD
+
 
     	playerInfo = new JLabel("<html>Player 1 (RED): " + players[0].getType() + " <br/>Player 2 (GREEN): " + players[1].getType() + "<br/>Player 3 (BLUE): " + players[2].getType() + "<br/>Player 4 (YELLOW): " + players[3].getType()
     			+ "<br/>Human = 0 <br/> Easy = 1 <br/> Hard = 2");
@@ -146,15 +134,11 @@ public class GameBoard extends JFrame implements ActionListener {
     	gameSpaces[0][0].add(playerInfo);
     	
 
-=======
-    	playerInfo = new JLabel("<html>Player 1 (Red): " + players[0].getTypeString() + " <br/>Player 2 (Green): " + players[1].getTypeString() +
-    			"<br/>Player 3 (Blue): " + players[2].getTypeString() + "<br/>Player 4 (Yellow): " + players[3].getTypeString());
-    	playerInfo.setForeground(Color.white);
-    	gameSpaces[0][0].add(playerInfo);
+
     	turnTracker = new JLabel("Last 3 moves:");
     	turnTracker.setForeground(Color.white);
     	gameSpaces[0][7].add(turnTracker);
->>>>>>> 6e6b93d900e0f02a7344e9109d748082c515496b
+
     	
     	getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(topPanel, BorderLayout.NORTH);
