@@ -19,7 +19,7 @@ public class GameBoard extends JFrame implements ActionListener {
     private Color setupColor; //used to set the color of the piece that starts in each space at the beginning of the game
     private Color defaultButtonColor; //used when button is selected/deselected
     private JButton quit, colorBlindButton, save, load, reserve;
-    private JLabel colorBlindInfo, currentTurn, reserveInfo, colorKey, declareWinner, playerInfo;
+    private JLabel colorBlindInfo, currentTurn, reserveInfo, colorKey, declareWinner;
     private GameSpace moveFrom; //space that has been selected to move from
     private GameSpace moveTo; //space that has been selected to move to
     private boolean moveFromSelected; //true when a space has already been selected to move from, used to determine if a space has been selected to move from or move to
@@ -51,11 +51,18 @@ public class GameBoard extends JFrame implements ActionListener {
     	
     	turn = rand.nextInt(4);
     	players = new Player[4];
+<<<<<<< HEAD
     	
     	players[0] = new Player(player1num, Color.red);
     	players[1] = new Player(player2num, Color.green);
     	players[2] = new Player(player3num, Color.cyan);
     	players[3] = new Player(player4num, Color.yellow);
+=======
+    	players[0] = new Player(0, Color.red);
+    	players[1] = new Player(1, Color.green);
+    	players[2] = new Player(0, Color.cyan);
+    	players[3] = new Player(2, Color.yellow);
+>>>>>>> 34351b6f094341cd4311def689fa2fa2a719a0f1
     	currentPlayer = players[turn];
     	
     	
@@ -119,11 +126,14 @@ public class GameBoard extends JFrame implements ActionListener {
     	gameSpaces[7][0].add(reserveInfo);
     	colorKey = new JLabel(" ");
     	gameSpaces[7][7].add(colorKey);
+<<<<<<< HEAD
     	playerInfo = new JLabel("<html>Player 1 (RED): " + players[0].getType() + " <br/>Player 2 (GREEN): " + players[1].getType() + "<br/>Player 3 (BLUE): " + players[2].getType() + "<br/>Player 4 (YELLOW): " + players[3].getType()
     			+ "<br/>Human = 0 <br/> Easy = 1 <br/> Hard = 2");
     	playerInfo.setForeground(Color.white);
     	gameSpaces[0][0].add(playerInfo);
     	
+=======
+>>>>>>> 34351b6f094341cd4311def689fa2fa2a719a0f1
     	
     	getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(topPanel, BorderLayout.NORTH);
@@ -162,8 +172,7 @@ public class GameBoard extends JFrame implements ActionListener {
 	    	if (!(this.isMovePossible())) {
 	    		noMoveCount++;
 	    		this.nextTurn();
-	    	}
-	    	if (!(gameWon)) {
+	    	}else if (!(gameWon)) {
 	    		noMoveCount = 0;
 		    	currentTurn.setText(this.getTurnColorString() + "'s turn");
 		    	if (!(currentPlayer.getType() == 0)) {
@@ -171,10 +180,6 @@ public class GameBoard extends JFrame implements ActionListener {
 		    	}
 	    	}
     	}
-    }
-    
-    public Player[] getPlayers() {
-    	return players;
     }
     
     public boolean isMovePossible() {
@@ -291,20 +296,46 @@ public class GameBoard extends JFrame implements ActionListener {
     	}
     	if (chooseMoveFrom == fromX.size()) {
     		//make reserve move
-    		chooseMoveTo = rand.nextInt(52); //There are 52 white spaces and 12 black. This chooses a white space.
-    		int i = 0;
-    		for (int y = 0; y < rows; y++) {
-    	   		for (int x = 0 ; x < columns; x++) {
-    	   			if (!(gameSpaces[x][y].getColor().equals(Color.black))) {
-    	   				if (i == chooseMoveTo) {
-    	   					moveHandler.makeReserveMove(gameSpaces[x][y], currentPlayer);
-    	   					this.updateReserveInfo();
-							this.nextTurn();
-							this.setColorBlind();
-    	   				}
-    	   				i++;
-    	   			}
-    	   		}
+    		if (currentPlayer.getType() == 1) {
+    			//easy version
+	    		chooseMoveTo = rand.nextInt(52); //There are 52 white spaces and 12 black. This chooses a white space.
+	    		int i = 0;
+	    		for (int y = 0; y < rows; y++) {
+	    	   		for (int x = 0 ; x < columns; x++) {
+	    	   			if (!(gameSpaces[x][y].getColor().equals(Color.black))) {
+	    	   				if (i == chooseMoveTo) {
+	    	   					moveHandler.makeReserveMove(gameSpaces[x][y], currentPlayer);
+	    	   					this.updateReserveInfo();
+								this.nextTurn();
+								this.setColorBlind();
+	    	   				}
+	    	   				i++;
+	    	   			}
+	    	   		}
+	    		}
+    		}else {
+    			//hard version
+    			chooseMoveTo = rand.nextInt(52); //There are 52 white spaces and 12 black. This chooses a white space.
+	    		int i = 0;
+	    		boolean goodMove = false;
+	    		while (!(goodMove)) {
+		    		for (int y = 0; y < rows; y++) {
+		    	   		for (int x = 0 ; x < columns; x++) {
+		    	   			if (!(gameSpaces[x][y].getColor().equals(Color.black))) {
+		    	   				if ((i == chooseMoveTo) && (gameSpaces[x][y].getStackSize() > 0)) {
+		    	   					if (!(gameSpaces[x][y].topPiece().getColor().equals(currentPlayer.getColor()))) {
+		    	   						goodMove = true;
+			    	   					moveHandler.makeReserveMove(gameSpaces[x][y], currentPlayer);
+			    	   					this.updateReserveInfo();
+										this.nextTurn();
+										this.setColorBlind();
+		    	   					}
+		    	   				}
+		    	   				i++;
+		    	   			}
+		    	   		}
+		    		}
+	    		}
     		}
     	}else {
     		//make normal move
@@ -313,39 +344,60 @@ public class GameBoard extends JFrame implements ActionListener {
     		int y = moveFrom.getYcoord();
     		boolean valid = false;
     		int distance = 0;
+    		int tryIdealMove = 0;
+    		//Hard AI will try to pick an ideal move to make by checking random moves. If it fails to find an ideal move 100 times it will make a random move.
+    		if (currentPlayer.getType() == 1) {
+    			tryIdealMove = 100;
+    		}
     		while (!(valid)) {
-    			System.out.print("in while\n");
     			distance = (rand.nextInt(moveFrom.getStackSize()) + 1);
         		int direction = rand.nextInt(4);
     			if (direction == 0) {
     				if ((x + distance) < 8) {
 	    				if (!(gameSpaces[x + distance][y].getColor().equals(Color.black))) {
-	    					valid = true;
-	    					moveTo = gameSpaces[x + distance][y];
+	    					if ((gameSpaces[x + distance][y].getStackSize() > 0) || (tryIdealMove >= 100)) {
+	    						if (!((tryIdealMove < 100) && (gameSpaces[x + distance][y].topPiece().getColor().equals(currentPlayer.getColor())))) {
+		    					valid = true;
+		    					moveTo = gameSpaces[x + distance][y];
+	    						}
+	    					}
 	    				}
     				}
     			}else if (direction == 1) {
     				if ((x - distance) >= 0) {
 	    				if (!(gameSpaces[x - distance][y].getColor().equals(Color.black))) {
-	    					valid = true;
-	    					moveTo = gameSpaces[x - distance][y];
+	    					if ((gameSpaces[x - distance][y].getStackSize() > 0) || (tryIdealMove >= 100)) {
+	    						if (!((tryIdealMove < 100) && (gameSpaces[x - distance][y].topPiece().getColor().equals(currentPlayer.getColor())))) {
+		    					valid = true;
+		    					moveTo = gameSpaces[x - distance][y];
+	    						}
+	    					}
 	    				}
     				}
     			}else if (direction == 2) {
     				if ((y + distance) < 8) {
 	    				if (!(gameSpaces[x][y + distance].getColor().equals(Color.black))) {
-	    					valid = true;
-	    					moveTo = gameSpaces[x][y + distance];
+	    					if ((gameSpaces[x][y + distance].getStackSize() > 0) || (tryIdealMove >= 100)) {
+	    						if (!((tryIdealMove < 100) && (gameSpaces[x][y + distance].topPiece().getColor().equals(currentPlayer.getColor())))) {
+		    					valid = true;
+		    					moveTo = gameSpaces[x][y + distance];
+	    						}
+	    					}
 	    				}
     				}
     			}else {
     				if ((y - distance) >= 0) {
 	    				if (!(gameSpaces[x][y - distance].getColor().equals(Color.black))) {
-	    					valid = true;
-	    					moveTo = gameSpaces[x][y - distance];
+	    					if ((gameSpaces[x][y - distance].getStackSize() > 0) || (tryIdealMove >= 100)) {
+	    						if (!((tryIdealMove < 100) && (gameSpaces[x][y - distance].topPiece().getColor().equals(currentPlayer.getColor())))) {
+		    					valid = true;
+		    					moveTo = gameSpaces[x][y - distance];
+	    						}
+	    					}
 	    				}
     				}
     			}
+    			tryIdealMove++;
     		}
     		moveHandler.makeMove(moveTo, moveFrom, currentPlayer, distance);
 			this.updateReserveInfo();
@@ -353,8 +405,11 @@ public class GameBoard extends JFrame implements ActionListener {
 			this.setColorBlind();
     	}
     }
+<<<<<<< HEAD
     
     
+=======
+>>>>>>> 34351b6f094341cd4311def689fa2fa2a719a0f1
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
