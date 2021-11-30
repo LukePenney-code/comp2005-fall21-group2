@@ -1,0 +1,3 @@
+-Implemented the start menu and AI parameter passing
+-Planned and participated in group meetings
+-Completed factors() method junit methods
