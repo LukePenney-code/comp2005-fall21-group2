@@ -2,21 +2,21 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.io.Serializable;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.util.Random;
 import java.lang.Math.*;
 import java.util.ArrayList;
-public class GameBoard extends JFrame implements ActionListener,Serializable {
+public class GameBoard extends JFrame implements ActionListener {
 	
     private JPanel topPanel;
     private JPanel leftPanel;
     private JPanel rightPanel;
+    private JPanel bottomPanel;
     private JPanel gameBoard;
     private GameSpace [][] gameSpaces;
-    private int rows, columns;
+    private int numPlayers, rows, columns;
     private Color setupColor; //used to set the color of the piece that starts in each space at the beginning of the game
     private Color defaultButtonColor; //used when button is selected/deselected
     private JButton quit, colorBlindButton, save, load, reserve, newGame;
@@ -34,11 +34,12 @@ public class GameBoard extends JFrame implements ActionListener,Serializable {
     private int noMoveCount; //Counts how many players in a row cannot move. If 3 players cannot move the 4th player wins.
     private boolean gameWon; //stops moves from being made if the game has ended
     private MoveHandler moveHandler;
+    private int player1num, player2num, player3num, player4num;
     private String thirdLastTurn;
     private String secondLastTurn;
     private String lastTurn;
     private boolean lastMoveWasReserve;
-	private GameBoard game;
+    private GameBoard game;
     
     
     //true when a space has already been selected to move from, used to determine if a space has been selected to move from or move to
@@ -53,6 +54,10 @@ public class GameBoard extends JFrame implements ActionListener,Serializable {
     	noMoveCount = 0;
     	gameWon = false;
     	moveHandler = new MoveHandler();
+    	this.player1num = player1num;
+    	this.player2num = player2num;
+    	this.player3num = player3num;
+    	this.player4num = player4num;
     	thirdLastTurn = " ";
     	secondLastTurn = " ";
     	lastTurn = " ";
@@ -83,9 +88,9 @@ public class GameBoard extends JFrame implements ActionListener,Serializable {
     	colorBlindButton.addActionListener(this);
     	quit.addActionListener(this);
     	save = new JButton("Save");
-    	save.addActionListener(this);
+    	save.addActionListener(e -> { save();} );
     	load = new JButton("Load");
-    	load.addActionListener(this);
+    	load.addActionListener(e -> { load();});
     	reserve = new JButton("Reserve");
     	defaultButtonColor = reserve.getBackground();
     	reserve.addActionListener(this);
@@ -97,6 +102,7 @@ public class GameBoard extends JFrame implements ActionListener,Serializable {
     	topPanel.add(save);
     	topPanel.add(load);
     	topPanel.add(reserve);
+    	
     	newGame = new JButton("New Game");
     	newGame.addActionListener(e -> {newGame();});
     	topPanel.add(newGame);
@@ -130,29 +136,20 @@ public class GameBoard extends JFrame implements ActionListener,Serializable {
     	reserveInfo.setForeground(Color.white);
     		
 
-
     	gameSpaces[7][0].add(reserveInfo);
     	colorKey = new JLabel(" ");
     	gameSpaces[7][7].add(colorKey);
 
 
-
-    	playerInfo = new JLabel("<html>Player 1 (RED): " + players[0].getType() + " <br/>Player 2 (GREEN): " + players[1].getType() + "<br/>Player 3 (BLUE): " + players[2].getType() + "<br/>Player 4 (YELLOW): " + players[3].getType()
-    			+ "<br/>Human = 0 <br/> Easy = 1 <br/> Hard = 2");
+    	playerInfo = new JLabel("<html>Player 1 (Red): " + players[0].getTypeString() + " <br/>Player 2 (Green): " + players[1].getTypeString() +
+    			"<br/>Player 3 (Blue): " + players[2].getTypeString() + "<br/>Player 4 (Yellow): " + players[3].getTypeString());
     	playerInfo.setForeground(Color.white);
     	gameSpaces[0][0].add(playerInfo);
 
 
-
-//    	playerInfo = new JLabel("<html>Player 1 (Red): " + players[0].getTypeString() + " <br/>Player 2 (Green): " + players[1].getTypeString() +
-//    			"<br/>Player 3 (Blue): " + players[2].getTypeString() + "<br/>Player 4 (Yellow): " + players[3].getTypeString());
-//    	playerInfo.setForeground(Color.white);
-//    	gameSpaces[0][0].add(playerInfo);
-
-    	turnTracker = new JLabel("Last 3 moves:");
+    	turnTracker = new JLabel("<HTML>Last 3 moves:<br/>(newest at bottom)<HTML>");
     	turnTracker.setForeground(Color.white);
     	gameSpaces[0][7].add(turnTracker);
-
 
 
     	getContentPane().setLayout(new BorderLayout());
@@ -171,12 +168,7 @@ public class GameBoard extends JFrame implements ActionListener,Serializable {
     		this.moveAI();
     	}
     }
-    private void newGame() {
-		// TODO Auto-generated method stub
-		dispose();
-		new StartMenu();
-	}
-	public void updateReserveInfo() {
+    public void updateReserveInfo() {
     	reserveInfo.setText("<html>Reserve:<br/>Red: " + players[0].getReserve() + "<br/>Green: " + players[1].getReserve() + "<br/>Blue: " +
     			players[2].getReserve() + "<br/>Yellow: "+ players[3].getReserve() + "<html>");
     }
@@ -218,7 +210,7 @@ public class GameBoard extends JFrame implements ActionListener,Serializable {
     	thirdLastTurn = secondLastTurn;
     	secondLastTurn = lastTurn;
     	lastTurn = (this.getTurnColorString(previousTurn) + ": " + from + " to (" + moveTo.getXcoord() + ", " + (7 - moveTo.getYcoord()) + ")");
-    	turnTracker.setText("<html>Last 3 moves:<br/>" + thirdLastTurn + "<br/>" + secondLastTurn + "<br/>" + lastTurn + " (new)<br/>Note: this square is (0, 0)<html>");
+    	turnTracker.setText("<html>Last 3 moves:<br/>" + thirdLastTurn + "<br/>" + secondLastTurn + "<br/>" + lastTurn + "<br/>Note: this square is (0, 0)<html>");
     	turnTracker.setForeground(Color.white);
     }
     
@@ -236,6 +228,11 @@ public class GameBoard extends JFrame implements ActionListener,Serializable {
 	    	}
     	}
     	return false; //player has no reserve and tops no spaces, no moves are possible
+    }
+    
+    public void newGame() {
+    	dispose();
+    	new StartMenu();
     }
     
     public Color getTurnColor() {
@@ -259,7 +256,7 @@ public class GameBoard extends JFrame implements ActionListener,Serializable {
     	}
     	return null;
     }
-    public void save() {
+ public void save() {
 		
     	
     	try {
@@ -402,9 +399,10 @@ public class GameBoard extends JFrame implements ActionListener,Serializable {
     		boolean valid = false;
     		int distance = 0;
     		int tryIdealMove = 0;
-    		//Hard AI will try to pick an ideal move to make by checking random moves. If it fails to find an ideal move 100 times it will make a random move.
+    		int idealAttemptLimit = 2;
+    		//Hard AI will try to pick an ideal move to make by checking random moves. If it fails to find an ideal move 2 times it will make a random move.
     		if (currentPlayer.getType() == 1) {
-    			tryIdealMove = 100;
+    			tryIdealMove = idealAttemptLimit; //Easy AI does not attempt ideal moves.
     		}
     		while (!(valid)) {
     			distance = (rand.nextInt(moveFrom.getStackSize()) + 1);
@@ -412,8 +410,8 @@ public class GameBoard extends JFrame implements ActionListener,Serializable {
     			if (direction == 0) {
     				if ((x + distance) < 8) {
 	    				if (!(gameSpaces[x + distance][y].getColor().equals(Color.black))) {
-	    					if ((gameSpaces[x + distance][y].getStackSize() > 0) || (tryIdealMove >= 100)) {
-	    						if (!((tryIdealMove < 100) && (gameSpaces[x + distance][y].topPiece().getColor().equals(currentPlayer.getColor())))) {
+	    					if ((gameSpaces[x + distance][y].getStackSize() > 0) || (tryIdealMove >= idealAttemptLimit)) {
+	    						if (!((tryIdealMove < idealAttemptLimit) && (gameSpaces[x + distance][y].topPiece().getColor().equals(currentPlayer.getColor())))) {
 		    					valid = true;
 		    					moveTo = gameSpaces[x + distance][y];
 	    						}
@@ -423,8 +421,8 @@ public class GameBoard extends JFrame implements ActionListener,Serializable {
     			}else if (direction == 1) {
     				if ((x - distance) >= 0) {
 	    				if (!(gameSpaces[x - distance][y].getColor().equals(Color.black))) {
-	    					if ((gameSpaces[x - distance][y].getStackSize() > 0) || (tryIdealMove >= 100)) {
-	    						if (!((tryIdealMove < 100) && (gameSpaces[x - distance][y].topPiece().getColor().equals(currentPlayer.getColor())))) {
+	    					if ((gameSpaces[x - distance][y].getStackSize() > 0) || (tryIdealMove >= idealAttemptLimit)) {
+	    						if (!((tryIdealMove < idealAttemptLimit) && (gameSpaces[x - distance][y].topPiece().getColor().equals(currentPlayer.getColor())))) {
 		    					valid = true;
 		    					moveTo = gameSpaces[x - distance][y];
 	    						}
@@ -434,8 +432,8 @@ public class GameBoard extends JFrame implements ActionListener,Serializable {
     			}else if (direction == 2) {
     				if ((y + distance) < 8) {
 	    				if (!(gameSpaces[x][y + distance].getColor().equals(Color.black))) {
-	    					if ((gameSpaces[x][y + distance].getStackSize() > 0) || (tryIdealMove >= 100)) {
-	    						if (!((tryIdealMove < 100) && (gameSpaces[x][y + distance].topPiece().getColor().equals(currentPlayer.getColor())))) {
+	    					if ((gameSpaces[x][y + distance].getStackSize() > 0) || (tryIdealMove >= idealAttemptLimit)) {
+	    						if (!((tryIdealMove < idealAttemptLimit) && (gameSpaces[x][y + distance].topPiece().getColor().equals(currentPlayer.getColor())))) {
 		    					valid = true;
 		    					moveTo = gameSpaces[x][y + distance];
 	    						}
@@ -445,8 +443,8 @@ public class GameBoard extends JFrame implements ActionListener,Serializable {
     			}else {
     				if ((y - distance) >= 0) {
 	    				if (!(gameSpaces[x][y - distance].getColor().equals(Color.black))) {
-	    					if ((gameSpaces[x][y - distance].getStackSize() > 0) || (tryIdealMove >= 100)) {
-	    						if (!((tryIdealMove < 100) && (gameSpaces[x][y - distance].topPiece().getColor().equals(currentPlayer.getColor())))) {
+	    					if ((gameSpaces[x][y - distance].getStackSize() > 0) || (tryIdealMove >= idealAttemptLimit)) {
+	    						if (!((tryIdealMove < idealAttemptLimit) && (gameSpaces[x][y - distance].topPiece().getColor().equals(currentPlayer.getColor())))) {
 		    					valid = true;
 		    					moveTo = gameSpaces[x][y - distance];
 	    						}
@@ -473,16 +471,8 @@ public class GameBoard extends JFrame implements ActionListener,Serializable {
 				System.exit(0);
 			}
 			if(response.equals("yes")) {
-				this.save();
+				save();
 			}
-		}
-		if(selected.equals(save)){
-			this.save();
-
-		}
-		if(selected.equals(load)){
-			this.load();
-
 		}
 		if (selected.equals(colorBlindButton)) {
 			if (colorBlindOn) {
