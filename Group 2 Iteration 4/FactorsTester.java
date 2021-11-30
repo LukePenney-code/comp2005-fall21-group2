@@ -30,6 +30,44 @@ class FactorsTester {
 		boolean expectedValue = false;
 		assertNotEquals(expectedValue, FactorsUtility.factor(30, 3));
 	}
+	@Test
+	    void testGetFactors1()
+	    {
+	        // TEST 1: should return 1 because it is a factor of the parameter value 2 
+	        int[] x = {1};
+	        assertNotEquals(1,FactorsUtility.getFactors(2));
+	    }
+
+	    @Test
+	    void testGetFactors2()
+	    {
+	        // TEST 2: should return an empty list because 1 has no factors
+	        int [] x={};
+	        assertNotEquals(x,FactorsUtility.getFactors(1));
+	    }
+
+	    @Test
+	    void testGetFactors3()
+	    {
+	        // TEST 3: should return an empty list because 0 has no factors
+	        assertThrows(IllegalArgumentException.class, () -> FactorsUtility.getFactors(-5));
+	    }
+
+	    @Test
+	    void testGetFactors4()
+	    {
+	        // TEST 4: should throw the exception because the parameter value is less than 0
+	        assertThrows(IllegalArgumentException.class, () -> FactorsUtility.getFactors(-1));
+	    }
+
+	    @Test
+	    void testGetFactors5()
+	    {
+	        // TEST 5: should return 1,2,3,4 and 6 because they are factors of parameter value 12
+	        int [] x={1,2,3,4,6};
+	        assertNotEquals(x,FactorsUtility.getFactors(12));
+	    }
+
 }
 	
 	
