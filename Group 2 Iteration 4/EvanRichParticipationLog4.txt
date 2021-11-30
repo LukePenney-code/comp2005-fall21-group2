@@ -1,0 +1,3 @@
+Worked on code. In particular, implemented Player and MoveHandler classes. Implemented Reserve move functionality, detection of players being unable to move and the game being won,
+algorithm for making easy and hard AI moves, move tracker in the bottom left of the board, and more.
+Took part in group discussion.
