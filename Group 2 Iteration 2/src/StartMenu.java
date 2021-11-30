@@ -8,7 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class StartMenu implements ActionListener, KeyListener{
-	private JLabel title,prompt, info;
+	private JLabel title, prompt, info, rules;
 	private JFrame frame;
 	private JButton start,load,quit, easy, hard, easy2, hard2, easy3, hard3, easy4, hard4, human1,human2,human3,human4;
 	private ImageIcon logo;
@@ -26,10 +26,7 @@ public class StartMenu implements ActionListener, KeyListener{
 		logo = new ImageIcon("workingLogo.png");
 		setUpLabel(frame,title,prompt,info,logo);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		
-		
-		
+		rules = new JLabel("<html>-You can move a piece on top of another piece or an empty space in one direction either horizontally or vertically but NOT diagonally.<br>-If you control a stack( your piece is on top of the stack) you can move multiple spaces, again not diagonally and only in one direction, but the space you are moving on to cannot be controlled by another colour. You can also choose to not move all pieces and leave the rest. You can only move to the amount of pieces you got in the stack or the amount of pieces you intend on moving.<br> -If a stack has more than 5 pieces you can remove the rest from the bottom and keep them as reserve pieces which can later be used in the game. You can only use pieces of your colour as reserve pieces but you can remove and keep pieces of another colour.<br>-The game ends when only one player can move the stacks. Meaning a player has a piece on top of every single stack. Last player who can make a move wins the game.</html>");
 		
 		start = new JButton("Start");
 		load = new JButton("Load");
@@ -291,6 +288,7 @@ public class StartMenu implements ActionListener, KeyListener{
 		case 73 : 
 		           infoMenu.setSize(500,700);
 				   infoMenu.setVisible(true);
+				   infoMenu.getContentPane().add(rules);
 				   
 		
 		}
